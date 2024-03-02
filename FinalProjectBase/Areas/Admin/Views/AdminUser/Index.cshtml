@@ -1,0 +1,43 @@
+﻿
+@model List<FinalProjectBase.Models.AppUserViewModel>
+<div class="container">
+	<div class="mb-3">
+		<a class="btn btn-primary" asp-action="Create" asp-controller="AdminUser" role="button">Create New Post</a>
+	</div>
+	<table class="table table-bordered table-striped small-table">
+		<thead>
+			<tr>
+				<th scope="col">Content of Post</th>
+				<th scope="col">Images</th>
+				<th scope="col" class="action-column">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var appUser in Model)
+			{
+				<tr>
+					<td class="custom-break">  @appUser.FirstName  @appUser.LastName</td>
+					<td class="ml-3">
+						@foreach (var image in appUser.Images)
+						{
+							<img src="@("/images/posts/" + image.ImageName)" class="rounded float-start img-thumbnail img-fluid custom-image" alt="">
+						}
+					</td>
+					<td>
+						<form asp-action="Delete" asp-route-id="@appUser.Id" method="post">
+							<div class="dropdown">
+								<button type="submit" class="btn btn-secondary dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Select Action
+								</button>
+								<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+									<li><a class="dropdown-item update-button" asp-action="Update" asp-route-id="@appUser.Id"> Update</a></li>
+									<li><button type="submit" class="dropdown-item delete-button" id="deleteButton"> Delete</button></li>
+								</ul>
+							</div>
+						</form>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>

@@ -1,0 +1,100 @@
+﻿@model FinalProjectBase.Models.PostViewModel
+
+<div class="container">
+	<div class="d-flex justify-content-between">
+		<form method="post" asp-action="Create" enctype="multipart/form-data" class="ml-2">
+			<div class="mb-3">
+				<label asp-for="@Model.FormFiles" for="image" class="form-label">Choose Image</label>
+				<input asp-for="@Model.FormFiles" type="file" class="form-control" id="image" multiple>
+			</div>
+			<div class="mb-3">
+				<label asp-for="@Model.Content" for="postText" class="form-label">Post Content</label>
+				<textarea asp-for="@Model.Content" id="postText" class="form-control" rows="3"></textarea>
+			</div>
+			<button type="submit" id="createButton" class="btn btn-success">Create</button>
+			<button type="submit" id="reviewButton" class="btn btn-danger">Review in Card</button>
+		</form>
+
+		<div class="card mx-auto shadow-card" style="width: 18rem;">
+			<div id="imageContainer"></div>
+			<div class="card-body">
+				<h5 class="card-title">Content of Post</h5>
+				<p class="card-text" id="postContent"></p>
+				<br>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+@section reviewJs{	
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				var inputElement = document.getElementById("image");
+				var defaultImageSrc = "/Admin/img/imageIcon.png"; // Default resim src
+
+				// İlk başta default resmi göster
+				var defaultImageElement = document.createElement("img");
+				defaultImageElement.src = defaultImageSrc;
+				defaultImageElement.className = "rounded float-start img-thumbnail img-fluid custom-image";
+				defaultImageElement.style.objectFit = "cover";
+
+				var imageContainer = document.getElementById("imageContainer");
+				imageContainer.appendChild(defaultImageElement);
+
+				// Dosya seçildiğinde işlem yap
+				inputElement.addEventListener("change", function () {
+					var files = inputElement.files;
+					if (files.length > 0) {
+						// Dosya seçildiğinde default resmi kaldır
+						imageContainer.innerHTML = "";
+
+						// Her dosya için önizleme oluştur
+						for (var i = 0; i < files.length; i++) {
+							var file = files[i];
+
+							var reader = new FileReader();
+							reader.onload = function (e) {
+								var imageElement = document.createElement("img");
+								imageElement.src = e.target.result;
+								imageElement.className = "rounded float-start img-thumbnail img-fluid custom-image";
+								imageElement.style.objectFit = "contain";
+								imageContainer.appendChild(imageElement);
+							};
+
+							reader.readAsDataURL(file);
+						}
+					}
+				});
+			});
+
+			document.getElementById("reviewButton").addEventListener("click", function (event) {
+				event.preventDefault();
+				var content = document.getElementById("postText").value;
+				var element = document.getElementById("postContent");
+				element.innerHTML = content;
+				console.log(content);
+			});
+		</script>
+	}
+
+
+
+
+
+<style>
+	.card-title {
+		margin-bottom: 0.5rem;
+		background: #f6cccc;
+		padding: 4px;
+		border-radius: 10px;
+		width: 60%;
+	}
+
+	.shadow-card {
+		box-shadow: 2px -2px 18px 6px rgba(0,0,0,0.64);
+		-webkit-box-shadow: 2px -2px 18px 6px rgba(0,0,0,0.64);
+		-moz-box-shadow: 2px -2px 18px 6px rgba(0,0,0,0.64);
+	}
+</style>
+

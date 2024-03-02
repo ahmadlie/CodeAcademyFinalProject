@@ -1,0 +1,52 @@
+@model FinalProjectBase.Models.AppUserViewModel      
+<div class="container">
+	<div class="d-flex justify-content-between">
+		<form method="post" asp-action="Create" enctype="multipart/form-data" class="ml-2">
+			<div class="mb-3">
+				<input asp-for="FormFile" type="file" class="form-control" id="imageInput" hidden>
+				<button type="button" class="btn btn-info" id="imageButton" >Choose Profile Photo</button>
+			</div>
+			<div class="mb-3">
+				<input asp-for="FirstName" type="text" class="form-control" rows="3" placeholder="First Name" id="firstnameInput">
+			</div>
+
+			<div class="mb-3">
+				<input asp-for="LastName" type="text" class="form-control" rows="3" placeholder="Last Name" id="lastnameInput">
+			</div>
+
+			<div class="mb-3">
+				<input asp-for="Email" type="email" class="form-control" rows="3" placeholder="Email" id="emailInput">
+			</div>
+
+			<div class="mb-3">
+				<input asp-for="PhoneNumber" type="tel" class="form-control" rows="3" placeholder="Phone Number" id="phonenumberInput">
+			</div>
+
+			<div class="mb-3">
+				<input asp-for="Username" type="text" class="form-control" rows="3" placeholder="Username" id="usernameInput">
+			</div>
+
+			<div class="mb-3">
+				<input asp-for="Password" type="password" class="form-control" rows="3" placeholder="Password">
+			</div>
+			<button type="submit" class="btn btn-success">Create</button>
+			<button type="submit" class="btn btn-danger" id="reviewCardBtn">Review in Card</button>
+		</form>
+					<p>@ViewData["CreateMessage"]</p>
+		<div class="card mx-auto shadow-card" style="width: 18rem; display: none;" id="userCreateCard">
+			<div id="imageContainer"></div>
+			<div class="card-body">
+				<h5 class="card-title">Data of User</h5>
+				<p class="card-text" id="fistnameTag" ></p>
+				<p class="card-text" id="lastnameTag" ></p>
+				<p class="card-text" id="emailTag" ></p>
+				<p class="card-text" id="phonenumberTag" ></p>
+				<p class="card-text" id="usernameTag" ></p>
+				<br>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="~/Admin/js/user-create.js"></script>
+<link href="~/Admin/css/user-create.css" rel="stylesheet">

@@ -1,0 +1,42 @@
+@{
+	Layout = null;
+}
+
+@model SignUpViewModel
+	<div class="wrapper">
+		<div class="title-text">
+			<div class="title signup">
+				Register
+			</div>
+		</div>
+		<div class="form-container">
+			<div class="form-inner">
+				<form asp-action="SignUp" asp-controller="SignUp" method="post" class="signup">
+					<div class="field">
+						<input asp-for="FirstName" type="text" placeholder="First Name" required>
+					</div>
+					<div class="field">
+						<input asp-for="LastName" type="text" placeholder="Last Name" required>
+					</div>
+					<div class="field">
+						<input asp-for="PhoneNumber" type="tel" placeholder="Phone Number" required>
+					</div>
+					<div class="field">
+						<input asp-for="Mail" type="text" placeholder="Email Address" required>
+					</div>
+					<div class="field">
+						<input asp-for="Username" type="text" placeholder="Username" required>
+					</div>
+					<div class="field">
+						<input asp-for="Password" type="password" placeholder="Password" required>
+					</div>
+
+					<div class="field btn">
+						<div class="btn-layer"></div>
+						<input type="submit" value="SignUp">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<link rel="stylesheet" href="~/css/login-signin.css">

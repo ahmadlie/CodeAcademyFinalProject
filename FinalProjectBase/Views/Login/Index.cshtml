@@ -1,0 +1,41 @@
+﻿@{
+	Layout = null;
+}
+
+@model LoginViewModel
+
+<div class="wrapper">
+	<div class="title-text">
+		<div class="title login">
+			Login
+		</div>
+	</div>
+	<div class="form-container">
+		<div class="form-inner">
+			<form asp-action="Login" asp-controller="Login" method="post" class="login">
+				<div class="field">
+					<input asp-for="Username" type="text" placeholder="Username" required>
+				</div>
+				<div class="field">
+					<input asp-for="Password" type="password" placeholder="Password" required>
+				</div>
+				<div class="pass-link">
+					<a href="">Reset password?</a>
+				</div>
+				<div class="field btn">
+					<div class="btn-layer"></div>
+					<input type="submit" value="SignIn">
+				</div>
+				<div class="signup-link">
+					Don't Have Account? <a href="~/SignUp/Index">Create A New Account</a>
+				</div>
+			</form>
+		</div>
+		<p class="text-danger temp-data">@TempData["Message"]</p>
+	</div>
+	<div class="background-image"></div>
+</div>
+
+
+
+<link rel="stylesheet" href="~/css/login-signin.css">

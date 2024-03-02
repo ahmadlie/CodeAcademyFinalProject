@@ -1,0 +1,7 @@
+﻿
+@*@model List<DTOLayer.PostDTO>
+@foreach (var item in Model)
+{
+	<img src="@("/images/posts/" + @item.ImageName)" class="rounded float-start" alt="">
+}*@
+
