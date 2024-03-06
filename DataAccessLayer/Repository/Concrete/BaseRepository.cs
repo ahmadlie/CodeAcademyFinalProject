@@ -29,7 +29,7 @@ namespace DataAccessLayer.Repository.Concrete
 		public void Delete(TEntity entity)
 		{
 			_entities.Remove(entity);
-			_dbContext.SaveChanges();
+			//_dbContext.SaveChanges();
 
 		}
 

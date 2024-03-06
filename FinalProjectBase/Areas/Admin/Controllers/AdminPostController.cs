@@ -74,6 +74,7 @@ namespace FinalProjectBase.Areas.Admin.Controllers
 				Content = postDTO.Content,
 				Images = postDTO.Images.Select(imageDTO => new ImageViewModel()
 				{
+					Id = imageDTO.Id,
 					ImageName = imageDTO.ImageName,
 					ImageUrl = imageDTO.ImageUrl
 				}).ToList()
@@ -84,29 +85,28 @@ namespace FinalProjectBase.Areas.Admin.Controllers
 
 
 		[HttpPost]
-		public IActionResult Update(PostViewModel postViewModel)
+		public IActionResult Update(PostViewModel postViewModel , params int[] changedImageIds)
 		{
 			PostDTO postDTO = new PostDTO()
 			{
 				Id = postViewModel.Id,
 				Content = postViewModel.Content,
-				Images = postViewModel.FormFiles.Select(file => new ImageDTO()
-				{					
+				Images = postViewModel.FormFiles.Select((file,index) => new ImageDTO()
+				{
+					Id = changedImageIds[index],
 					ImageName = file.FileName,
 					ImageUrl = _postService.UploadPhoto(file),
 				}).ToList()
-			};
+			};		
 
-			_postService.UpdatePostWithImages(postDTO);
+			_postService.Update(postDTO);
 			return RedirectToAction(nameof(Index));
 		}
 
 		[HttpPost]
 		public IActionResult Delete([FromRoute] int id)
 		{
-			var postDTO = _postService.GetById(id);
-			
-			_postService.Delete(postDTO);
+			_postService.Delete(id);
 			return RedirectToAction(nameof(Index));
 		}
 

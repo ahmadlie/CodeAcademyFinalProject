@@ -12,7 +12,7 @@ namespace BusinessLayer.Abstract.Base
 		TDto GetById(int id);
 		IEnumerable<TDto> GetAll();
 		void Update(TDto dto);
-		void Delete(TDto dto);
+		void Delete(int id);
 		void Create(TDto dto);
 
 	}

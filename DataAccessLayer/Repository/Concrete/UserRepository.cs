@@ -33,12 +33,12 @@ namespace DataAccessLayer.Repository.Concrete
 
 		public IEnumerable<AppUser> GetAll()
 		{
-			return _dbSet.AsNoTracking().ToList();
+			return _dbSet.Include(x => x.Images).AsNoTracking().ToList();
 		}
 
 		public AppUser GetById(int id)
 		{
-			return _dbSet.AsNoTracking().FirstOrDefault(x => x.Id == id);
+			return _dbSet.Include(x=>x.Images).AsNoTracking().FirstOrDefault(x => x.Id == id);
 		}
 
 		public void Save()

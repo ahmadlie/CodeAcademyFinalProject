@@ -30,10 +30,12 @@ namespace BusinessLayer.Concrete
 			_repository.Add(entity);
 		}
 
-		public void Delete(TDto dto)
+		public void Delete(int id)
 		{
+			var dto = GetById(id);
 			var entity = _mapper.Map<TEntity>(dto);
 			_repository.Delete(entity);
+			_repository.Save();	
 		}
 
 		public IEnumerable<TDto> GetAll()

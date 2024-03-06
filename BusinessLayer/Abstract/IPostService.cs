@@ -15,6 +15,5 @@ namespace BusinessLayer.Abstract
 		string UploadPhoto(IFormFile image);
 		IEnumerable<PostDTO> GetPosts();
 		PostDTO GetPostById(int id);
-		void UpdatePostWithImages(PostDTO postDTO);
 	}
 }

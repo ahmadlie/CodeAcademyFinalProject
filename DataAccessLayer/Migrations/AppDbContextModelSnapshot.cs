@@ -436,7 +436,8 @@ namespace DataAccessLayer.Migrations
                 {
                     b.HasOne("EntityLayer.Concrete.AppUser", "AppUser")
                         .WithMany("Posts")
-                        .HasForeignKey("AppUserId");
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("EntityLayer.Concrete.AppUser", "DeletedBy")
                         .WithMany()

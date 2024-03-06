@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,10 +20,12 @@ namespace BusinessLayer.Concrete
 	public class PostService : BaseService<PostDTO, Post, IPostRepository>, IPostService
 	{
 		private readonly IHostingEnvironment _hostEnvironment;
+		private readonly IImageRepository _imageRepository;
 
-		public PostService(IPostRepository repository, IMapper mapper, IHostingEnvironment hostEnvironment) : base(repository, mapper)
+		public PostService(IPostRepository repository, IMapper mapper, IHostingEnvironment hostEnvironment, IImageRepository imageRepository) : base(repository, mapper)
 		{
 			_hostEnvironment = hostEnvironment;
+			_imageRepository = imageRepository;
 		}
 
 		public PostDTO GetPostById(int id)
@@ -51,18 +54,6 @@ namespace BusinessLayer.Concrete
 			}
 
 			return fullPath;
-		}
-
-		public void UpdatePostWithImages(PostDTO postDTO)
-		{
-			var post = _repository.GetPostById(postDTO.Id);
-			post.Content = postDTO.Content;
-			post.Images = postDTO.Images.Select(imageDTO => new Image()
-			{
-				ImageName = imageDTO.ImageName,
-				ImageUrl = imageDTO.ImageUrl,
-			}).ToList();
-			_repository.Save();
 		}
 	}
 }

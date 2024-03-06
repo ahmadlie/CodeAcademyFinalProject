@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240224152706_mig_1")]
-    partial class mig_1
+    [Migration("20240304202503_mig_2")]
+    partial class mig_2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -209,7 +209,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("PostId")
+                    b.Property<int?>("PostId")
                         .HasColumnType("int");
 
                     b.Property<int?>("UpdatedById")
@@ -420,9 +420,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasOne("EntityLayer.Concrete.Post", "Post")
                         .WithMany("Images")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PostId");
 
                     b.HasOne("EntityLayer.Concrete.AppUser", "UpdatedBy")
                         .WithMany()
@@ -441,7 +439,8 @@ namespace DataAccessLayer.Migrations
                 {
                     b.HasOne("EntityLayer.Concrete.AppUser", "AppUser")
                         .WithMany("Posts")
-                        .HasForeignKey("AppUserId");
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("EntityLayer.Concrete.AppUser", "DeletedBy")
                         .WithMany()

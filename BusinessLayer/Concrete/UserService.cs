@@ -40,8 +40,9 @@ namespace BusinessLayer.Concrete
 			_userRepository.Add(entity);
 		}
 
-		public void Delete(AppUserDTO dto)
+		public void Delete(int id)
 		{
+			var dto = GetById(id);
 			var entity = _mapper.Map<AppUser>(dto);
 			_userRepository.Delete(entity);
 		}
@@ -105,7 +106,7 @@ namespace BusinessLayer.Concrete
 			return fullPath;
 		}
 
-		public TDest MapFromTo<TSrc , TDest>(TSrc src) 
+		public TDest MapFromTo<TSrc, TDest>(TSrc src)
 		{
 			return _mapper.Map<TDest>(src);
 		}

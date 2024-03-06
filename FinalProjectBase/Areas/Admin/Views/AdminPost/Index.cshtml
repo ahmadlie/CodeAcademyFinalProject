@@ -24,14 +24,14 @@
 						}
 					</td>
 					<td>
-						<form asp-action="Delete" asp-route-id="@post.Id" method="post">
+						<form>
 							<div class="dropdown">
 								<button type="submit" class="btn btn-secondary dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 									Select Action
 								</button>
 								<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 									<li><a class="dropdown-item update-button" asp-action="Update" asp-route-id="@post.Id"> Update</a></li>
-									<li><button type="submit" class="dropdown-item delete-button" id="deleteButton"> Delete</button></li>
+									<li><button type="button" class="dropdown-item delete-button" id="deleteButton" onclick="ExecuteAlert()"> Delete</button></li>
 								</ul>
 							</div>
 						</form>
@@ -41,6 +41,24 @@
 		</tbody>
 	</table>
 </div>
+<script>
+	function ExecuteAlert() {
+		Swal.fire({
+			title: "Do you want to save the changes?",
+			showDenyButton: true,
+			showCancelButton: true,
+			confirmButtonText: "Save",
+			denyButtonText: `Don't save`
+		}).then((result) => {
+			/* Read more about isConfirmed, isDenied below */
+			if (result.isConfirmed) {
+				Swal.fire("Saved!", "", "success");
+			} else if (result.isDenied) {
+				Swal.fire("Changes are not saved", "", "info");
+			}
+		});
+	}
+</script>
 
 
 @section imageCss{
@@ -49,5 +67,6 @@
 
 @section indexJs{
 	<script src="~/Admin/js/index.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 }
 

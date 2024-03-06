@@ -41,6 +41,7 @@ var mapperConfiguration = new MapperConfiguration(cfg =>
 builder.Services.AddSingleton(mapperConfiguration.CreateMapper());
 builder.Services.AddTransient<IPostRepository, PostRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IUserService, UserService>();
 

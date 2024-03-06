@@ -1,51 +1,57 @@
 ﻿@model FinalProjectBase.Models.PostViewModel
 
 <div class="container">
-    <h2>Edit This Post</h2>
-    <form method="post" asp-action="Update" enctype="multipart/form-data">
-        <div class="form-group">
-            <label asp-for="@Model.Content" for="content">Content of Post</label>
-            <input asp-for="@Model.Content" type="text" class="form-control" id="content" name="content" value="@Model.Content">
-        </div>
+	<h2>Edit This Post</h2>
+	<form method="post" asp-action="Update" enctype="multipart/form-data">
+		<div class="form-group">
+			<label asp-for="@Model.Content" for="content">Content of Post</label>
+			<input asp-for="@Model.Content" type="text" class="form-control" id="content" name="content"
+				   value="@Model.Content">
+		</div>
 
-        <div class="row">
-            @for (var i = 0; i < Model.Images.Count; i++)
-            {
-                var image = Model.Images[i];
-                var displayIndex = i + 1;
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <div class="image-container" id="imageContainer@(i)">
-                            <img src="@("/images/posts/" + image.ImageName)" class="rounded custom-image" alt="">
-                            <div class="label-overlay">Image @(displayIndex)</div>
-                        </div>
-                    </div>
-                </div>
+		<div class="row">
+			
+			@for (var i = 0; i < Model.Images.Count; i++)
+			{
+				var image = Model.Images[i];
+				var displayIndex = i + 1;
+				<div class="col-md-6">
+					<div class="form-group">
+						<div class="image-container" id="imageContainer@(i)">
+							<img src="@("/images/posts/" + image.ImageName)" class="rounded custom-image" alt="" id="image@(i)" onclick="openFileExplorer(@i)">
+							<input asp-for="@Model.FormFiles" hidden type="file" id="fileInput@(i)" class="@image.Id" onchange="updateImage(@i)">
+							<input hidden id="changedImageId@(i)" name="changedImageIds" value="">
+							<div class="label-overlay">Image @(displayIndex)</div>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
 
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="@Model.FormFiles[i]" class="form-label">Change This Image</label>
-                        <input asp-for="@Model.FormFiles[i]" class="form-control" type="file" id="newImage@(i)" name="FormFiles" accept="image/*">
+		<script>
+			function openFileExplorer(index) {
+				var fileInput = document.getElementById("fileInput" + index);
+				if (fileInput) {
+					fileInput.click();
+				}
+			}
+			function updateImage(index) {
+				var fileInput = document.getElementById("fileInput" + index);
+				var image = document.getElementById("image" + index);
+				var changedImageInput = document.getElementById("changedImageId" + index);
+				var imageId = fileInput.classList[0];
+				changedImageInput.value = imageId;
 
-                        <script>
-                            document.getElementById('newImage@(i)').addEventListener('change', function () {
-                                var input = this;
-                                if (input.files && input.files[0]) {
-                                    var reader = new FileReader();
-                                    reader.onload = function (e) {
-                                        document.getElementById('imageContainer@(i)').querySelector('img').src = e.target.result;
-                                    }
-                                    reader.readAsDataURL(input.files[0]);
-                                }
-                            });
-                        </script>
-                    </div>
-                </div>
-            }
-        </div>
+				var reader = new FileReader();
+				reader.onload = function (e) {
+					image.src = e.target.result;
+				};
+				reader.readAsDataURL(fileInput.files[0]);
+			}
 
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+		</script>
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</form>
 </div>
 
 
@@ -54,14 +60,14 @@
 
 @section updateImageJs {
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-		crossorigin="anonymous"></script>
+			integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+			crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-		crossorigin="anonymous"></script>
+			integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+			crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-		crossorigin="anonymous"></script>
+			integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+			crossorigin="anonymous"></script>
 	<script src="~/Admin/js/update-image.js"></script>
 }
 

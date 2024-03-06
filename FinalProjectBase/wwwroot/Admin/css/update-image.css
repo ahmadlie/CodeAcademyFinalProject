@@ -11,6 +11,7 @@ body {
     display: inline-block;
     text-align: center;
     margin-top: 20px;
+    cursor: pointer;
 }
 
 .custom-image {
@@ -32,4 +33,9 @@ body {
     font-weight: bold;
     border-bottom-left-radius: 8px; /* Optional: Rounded corners */
     border-bottom-right-radius: 8px; /* Optional: Rounded corners */
+}
+
+.image-container:hover img {
+    transform: scale(1.1); /* Buradaki değeri istediğiniz gibi ayarlayabilirsiniz */
+    transition: transform 0.3s ease;
 }

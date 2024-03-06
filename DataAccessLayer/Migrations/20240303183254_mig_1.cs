@@ -247,7 +247,7 @@ namespace DataAccessLayer.Migrations
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImageName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AppUserId = table.Column<int>(type: "int", nullable: true),
-                    PostId = table.Column<int>(type: "int", nullable: false),
+                    PostId = table.Column<int>(type: "int", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -262,7 +262,8 @@ namespace DataAccessLayer.Migrations
                         name: "FK_Images_AspNetUsers_AppUserId",
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Images_AspNetUsers_DeletedById",
                         column: x => x.DeletedById,
@@ -278,7 +279,7 @@ namespace DataAccessLayer.Migrations
                         column: x => x.PostId,
                         principalTable: "Posts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateIndex(

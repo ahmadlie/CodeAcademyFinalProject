@@ -17,7 +17,8 @@ namespace DataAccessLayer.Configurations
 
 			builder.HasOne(x => x.AppUser)
 				   .WithMany(x => x.Posts)
-				   .HasForeignKey(x => x.AppUserId);
+				   .HasForeignKey(x => x.AppUserId)
+				   .OnDelete(DeleteBehavior.Cascade);
 
 			builder.HasOne(x => x.DeletedBy)
 				   .WithMany()

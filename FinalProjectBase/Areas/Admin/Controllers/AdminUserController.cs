@@ -45,16 +45,22 @@ namespace FinalProjectBase.Areas.Admin.Controllers
 			var appUserDTO = _userService.MapFromTo<AppUserViewModel, AppUserDTO>(model);
 			try
 			{
-				await _userService.SignUp(appUserDTO);	
-				return RedirectToAction("Index","AdminUser");
+				await _userService.SignUp(appUserDTO);
+				return RedirectToAction("Index", "AdminUser");
 			}
 			catch (Exception ex)
 			{
 				ViewData["CreateMessage"] = ex.Message;
 				return RedirectToAction("Create");
 			}
-			
+		}
 
+
+		[HttpPost]
+		public IActionResult Delete([FromRoute] int id)
+		{
+			_userService.Delete(id);
+			return RedirectToAction("Index");
 		}
 	}
 }
