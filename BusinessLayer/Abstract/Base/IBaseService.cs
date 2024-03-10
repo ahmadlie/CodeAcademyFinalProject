@@ -11,7 +11,7 @@ namespace BusinessLayer.Abstract.Base
 	{
 		TDto GetById(int id);
 		IEnumerable<TDto> GetAll();
-		void Update(TDto dto);
+		Task Update(TDto dto);
 		void Delete(int id);
 		void Create(TDto dto);
 

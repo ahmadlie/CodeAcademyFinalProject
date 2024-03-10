@@ -52,7 +52,7 @@ namespace BusinessLayer.Concrete
 			return dto;
 		}
 
-		public void Update(TDto dto)
+		public async Task Update(TDto dto)
 		{
 			var entity = _mapper.Map<TEntity>(dto);
 			_repository.Update(entity);

@@ -13,9 +13,10 @@ namespace DataAccessLayer.Configurations
 	{
 		public void Configure(EntityTypeBuilder<AppUser> builder)
 		{
-			builder.HasMany(x => x.Images)
-				   .WithOne(x => x.AppUser)
-				   .HasForeignKey(x => x.AppUserId);
+			builder.HasOne(x => x.Image)
+				   .WithMany(x => x.AppUsers)
+				   .HasForeignKey(x => x.ImageId)
+				   .OnDelete(DeleteBehavior.SetNull);
 
 			builder.HasMany(x=>x.Comments)
 				   .WithOne(x=>x.AppUser)

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -42,8 +43,7 @@ namespace BusinessLayer.Concrete
 
 		public void Delete(int id)
 		{
-			var dto = GetById(id);
-			var entity = _mapper.Map<AppUser>(dto);
+			var entity = _userRepository.GetById(id);
 			_userRepository.Delete(entity);
 		}
 
@@ -85,10 +85,22 @@ namespace BusinessLayer.Concrete
 
 		}
 
-		public void Update(AppUserDTO dto)
+		public async Task Update(AppUserDTO dto)
 		{
-			var entity = _mapper.Map<AppUser>(dto);
-			_userRepository.Update(entity);
+			var user = await _userManager.FindByIdAsync($"{dto.Id}");
+			if (user is not null)
+			{
+				var newPasswordHash = _userManager.PasswordHasher.HashPassword(user, dto.Password);
+				user.Email = dto.EMail;
+				user.FirstName = dto.FirstName;
+				user.LastName = dto.LastName;
+				user.PhoneNumber = dto.PhoneNumber;
+				user.UserName = dto.Username;												
+				user.PasswordHash = newPasswordHash;
+				var res = await _userManager.UpdateAsync(user);
+				if (!res.Succeeded) { throw new Exception("Not Updated"); }
+			}
+			
 		}
 
 		public string UploadUserPhoto(IFormFile formFile)

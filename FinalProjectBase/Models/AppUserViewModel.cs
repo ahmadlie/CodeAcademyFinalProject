@@ -9,7 +9,7 @@
         public string? PhoneNumber { get; set; }
         public string? Username { get; set; }
         public string? Password { get; set; }
-        public List<ImageViewModel>? Images { get; set; }
+        public ImageViewModel? Image { get; set; }
         public IFormFile? FormFile { get; set; }
     }
 }

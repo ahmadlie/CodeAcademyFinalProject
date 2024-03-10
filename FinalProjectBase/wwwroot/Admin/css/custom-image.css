@@ -2,7 +2,7 @@
     max-width: 100%; /* Resmin maksimum genişliği */
     max-height: 100%; /* Resmin maksimum yüksekliği */
     height: 70px; /* Yüksekliği otomatik olarak ayarla, oranları koru */
-    width: 90px; /* Genişliği otomatik olarak ayarla, oranları koru */
+    width: 75px; /* Genişliği otomatik olarak ayarla, oranları koru */
 }
 
 .table {

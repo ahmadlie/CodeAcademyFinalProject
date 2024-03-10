@@ -11,5 +11,6 @@ namespace DTOLayer
 		public int Id {  get; set; }
 		public string ImageName { get; set; }
 		public string ImageUrl { get; set; }
+		public List<AppUserDTO> AppUsers { get; set; }	
 	}
 }

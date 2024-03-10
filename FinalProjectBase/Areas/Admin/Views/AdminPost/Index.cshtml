@@ -5,7 +5,7 @@
 		<a class="btn btn-primary" asp-action="Create" asp-controller="AdminPost" role="button">Create New Post</a>
 	</div>
 	<table class="table table-bordered table-striped small-table">
-		<thead>
+		<thead style="background-color: #333; color: white;">
 			<tr>
 				<th scope="col">Content of Post</th>
 				<th scope="col">Images</th>
@@ -16,49 +16,63 @@
 			@foreach (var post in Model)
 			{
 				<tr>
-					<td class="custom-break">@post.Content</td>
-					<td class="ml-3">
-						@foreach (var image in post.Images)
-						{
-							<img src="@("/images/posts/" + image.ImageName)" class="rounded float-start img-thumbnail img-fluid custom-image" alt="">
-						}
+					<td class="custom-break align-middle">@post.Content</td>
+					<td class="align-middle text-center">
+						<div class="d-flex justify-content-center">
+							@foreach (var image in post.Images)
+							{
+								<img src="@("/images/posts/" + image.ImageName)" class="rounded float-start img-thumbnail img-fluid custom-image" style="border-radius: 1.25rem !important;" alt="">
+							}
+						</div>
 					</td>
-					<td>
-						<form>
+					<td class="align-middle">
+						<form id="formForDelete@(post.Id)" asp-route-id="@post.Id" asp-action="Delete" asp-controller="AdminPost">
 							<div class="dropdown">
 								<button type="submit" class="btn btn-secondary dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 									Select Action
 								</button>
 								<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-									<li><a class="dropdown-item update-button" asp-action="Update" asp-route-id="@post.Id"> Update</a></li>
-									<li><button type="button" class="dropdown-item delete-button" id="deleteButton" onclick="ExecuteAlert()"> Delete</button></li>
+									<li><a class="dropdown-item update-button" asp-action="Update" asp-route-id="@post.Id">Update</a></li>
+									<li>
+										<button type="button" class="dropdown-item delete-button" id="deleteButton@(post.Id)" onclick="ExecuteAlert@(post.Id)()">Delete</button>
+									</li>
 								</ul>
 							</div>
 						</form>
+						<script>
+                            function ExecuteAlert@(post.Id)() {
+                                Swal.fire({
+                                    title: "Do you want to delete?",
+                                    showDenyButton: true,
+                                    showCancelButton: true,
+                                    confirmButtonText: "Delete",
+                                    denyButtonText: `Go Back`
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        Swal.fire({
+                                            title: "Deleted!",
+                                            icon: "success",
+                                            timer: 1000,
+                                            showConfirmButton: false,
+                                        }).then(() => {
+                                            var form = document.getElementById("formForDelete@(post.Id)");
+                                            form.submit();
+                                        });
+                                    } else if (result.isDenied) {
+                                        // Handle denial if needed
+                                    }
+                                });
+                            }
+						</script>
 					</td>
 				</tr>
 			}
 		</tbody>
 	</table>
 </div>
-<script>
-	function ExecuteAlert() {
-		Swal.fire({
-			title: "Do you want to save the changes?",
-			showDenyButton: true,
-			showCancelButton: true,
-			confirmButtonText: "Save",
-			denyButtonText: `Don't save`
-		}).then((result) => {
-			/* Read more about isConfirmed, isDenied below */
-			if (result.isConfirmed) {
-				Swal.fire("Saved!", "", "success");
-			} else if (result.isDenied) {
-				Swal.fire("Changes are not saved", "", "info");
-			}
-		});
-	}
-</script>
+
+
+
 
 
 @section imageCss{

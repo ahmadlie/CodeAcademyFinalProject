@@ -10,8 +10,7 @@ namespace EntityLayer.Concrete
 {
 	public class Post : BaseEntity
 	{
-		public string? Content { get; set; }
-		
+		public string? Content { get; set; }		
 		public int? AppUserId { get; set; }
 		public AppUser? AppUser { get; set; }
 		public List<Image>? Images { get; set; }

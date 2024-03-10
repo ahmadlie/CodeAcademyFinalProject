@@ -13,7 +13,8 @@ namespace EntityLayer.Concrete
 		public string? FirstName {  get; set; }
 		public string? LastName { get; set; }
 		public List<Post>? Posts { get; set; }
-		public List<Image>? Images {  get; set; }
+		public Image? Image {  get; set; }
+		public int? ImageId { get; set; }
 		public List<Comment>? Comments { get; set; }
 
 	}

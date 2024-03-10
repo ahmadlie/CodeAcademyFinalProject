@@ -11,9 +11,8 @@ namespace EntityLayer.Concrete
 	{
 		public string ImageUrl { get; set; } = null!;
 		public string ImageName { get; set; } = null!;
-		public int? AppUserId { get; set; }
-		public AppUser? AppUser { get; set; }
-		public int?	PostId { get; set; }
+		public int? PostId { get; set; }
 		public Post? Post { get; set; }
+		public List<AppUser>? AppUsers { get; set; }
 	}
 }

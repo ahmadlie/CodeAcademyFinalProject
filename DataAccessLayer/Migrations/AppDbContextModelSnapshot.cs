@@ -77,6 +77,9 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ImageId")
+                        .HasColumnType("int");
+
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
@@ -114,6 +117,8 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ImageId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -183,9 +188,6 @@ namespace DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AppUserId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -216,8 +218,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
 
                     b.HasIndex("DeletedById");
 
@@ -374,6 +374,16 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("EntityLayer.Concrete.AppUser", b =>
+                {
+                    b.HasOne("EntityLayer.Concrete.Image", "Image")
+                        .WithMany("AppUsers")
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Image");
+                });
+
             modelBuilder.Entity("EntityLayer.Concrete.Comment", b =>
                 {
                     b.HasOne("EntityLayer.Concrete.AppUser", "AppUser")
@@ -407,10 +417,6 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("EntityLayer.Concrete.Image", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.AppUser", "AppUser")
-                        .WithMany("Images")
-                        .HasForeignKey("AppUserId");
-
                     b.HasOne("EntityLayer.Concrete.AppUser", "DeletedBy")
                         .WithMany()
                         .HasForeignKey("DeletedById");
@@ -422,8 +428,6 @@ namespace DataAccessLayer.Migrations
                     b.HasOne("EntityLayer.Concrete.AppUser", "UpdatedBy")
                         .WithMany()
                         .HasForeignKey("UpdatedById");
-
-                    b.Navigation("AppUser");
 
                     b.Navigation("DeletedBy");
 
@@ -509,9 +513,12 @@ namespace DataAccessLayer.Migrations
                 {
                     b.Navigation("Comments");
 
-                    b.Navigation("Images");
-
                     b.Navigation("Posts");
+                });
+
+            modelBuilder.Entity("EntityLayer.Concrete.Image", b =>
+                {
+                    b.Navigation("AppUsers");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Post", b =>
