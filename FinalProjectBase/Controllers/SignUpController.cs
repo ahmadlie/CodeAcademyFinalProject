@@ -41,7 +41,7 @@ namespace FinalProjectBase.Controllers
 				await _userService.SignUp(appUserDTO);
 				return RedirectToAction("Index", "Login");
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				return RedirectToAction("Index");
 			}		    			

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -26,14 +27,22 @@ namespace BusinessLayer.Concrete
 		private readonly SignInManager<AppUser> _signInManager;
 		private readonly IUserRepository _userRepository;
 		private readonly IMapper _mapper;
+		private readonly ITokenService _tokenService;
 		private readonly IHostingEnvironment _hostEnvironment;
-		public UserService(IUserRepository repository, IMapper mapper, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IHostingEnvironment hostEnvironment)
+
+		public UserService(IUserRepository repository,
+			IMapper mapper,
+			UserManager<AppUser> userManager,
+			SignInManager<AppUser> signInManager,
+			IHostingEnvironment hostEnvironment,
+			ITokenService tokenService)
 		{
 			_userRepository = repository;
 			_mapper = mapper;
 			_userManager = userManager;
 			_signInManager = signInManager;
 			_hostEnvironment = hostEnvironment;
+			_tokenService = tokenService;
 		}
 		public void Create(AppUserDTO dto)
 		{
@@ -61,13 +70,14 @@ namespace BusinessLayer.Concrete
 			return dto;
 		}
 
-		public async Task Login(AppUserDTO appUserDTO)
+		public async Task<string> Login(AppUserDTO appUserDTO)
 		{
-			var resUser = await _userManager.FindByNameAsync(appUserDTO.Username);
+			var resUser = await _userManager.FindByNameAsync(appUserDTO.Username!);
 			if (resUser is not null)
 			{
-				var resSignIn = await _signInManager.PasswordSignInAsync(resUser, appUserDTO.Password, false, false);
+				var resSignIn = await _signInManager.PasswordSignInAsync(resUser, appUserDTO.Password!, false, false);
 				if (!resSignIn.Succeeded) { throw new Exception("Incorrect Username or Password!"); }
+				return _tokenService.CreateAccessToken(5, resUser);
 			}
 			else { throw new Exception("User Not Found!"); }
 		}
@@ -80,7 +90,7 @@ namespace BusinessLayer.Concrete
 		public async Task SignUp(AppUserDTO user)
 		{
 			var entity = _mapper.Map<AppUser>(user);
-			var res = await _userManager.CreateAsync(entity, user.Password);
+			var res = await _userManager.CreateAsync(entity, user.Password!);
 			if (!res.Succeeded) { throw new Exception("Something Wrong!"); }
 
 		}
@@ -90,17 +100,17 @@ namespace BusinessLayer.Concrete
 			var user = await _userManager.FindByIdAsync($"{dto.Id}");
 			if (user is not null)
 			{
-				var newPasswordHash = _userManager.PasswordHasher.HashPassword(user, dto.Password);
+				var newPasswordHash = _userManager.PasswordHasher.HashPassword(user, dto.Password!);
 				user.Email = dto.EMail;
 				user.FirstName = dto.FirstName;
 				user.LastName = dto.LastName;
 				user.PhoneNumber = dto.PhoneNumber;
-				user.UserName = dto.Username;												
+				user.UserName = dto.Username;
 				user.PasswordHash = newPasswordHash;
 				var res = await _userManager.UpdateAsync(user);
 				if (!res.Succeeded) { throw new Exception("Not Updated"); }
 			}
-			
+
 		}
 
 		public string UploadUserPhoto(IFormFile formFile)
@@ -122,6 +132,16 @@ namespace BusinessLayer.Concrete
 		{
 			return _mapper.Map<TDest>(src);
 		}
+
+
+		public async Task<AppUserDTO> GetCurrentUserAsync(HttpContext httpContext)
+		{
+			var appUser = await _userManager.GetUserAsync(httpContext.User);
+			var appUserDTO = _mapper.Map<AppUserDTO>(appUser);
+			return appUserDTO;
+		}
+
+		
 	}
 }
 

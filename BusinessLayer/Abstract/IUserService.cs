@@ -15,8 +15,9 @@ namespace BusinessLayer.Abstract
 	{
 		Task SignUp(AppUserDTO user);
 		AppUser MapForSignIn(AppUserDTO user);
-		Task Login(AppUserDTO user);
+		Task<string> Login(AppUserDTO user);
 		string UploadUserPhoto(IFormFile formFile);
 		TDest MapFromTo<TSrc, TDest>(TSrc src);
+		Task<AppUserDTO> GetCurrentUserAsync(HttpContext httpContext);
 	}
 }
