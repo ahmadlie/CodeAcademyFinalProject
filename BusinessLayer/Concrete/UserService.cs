@@ -141,7 +141,7 @@ namespace BusinessLayer.Concrete
 			return appUserDTO;
 		}
 
-		
+
 	}
 }
 

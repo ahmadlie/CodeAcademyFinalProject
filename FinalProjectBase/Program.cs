@@ -16,6 +16,7 @@ using FinalProjectBase.Config;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using BusinessLayer.Extensions;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -79,6 +80,13 @@ else
 }
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+
+using (var scope = app.Services.CreateScope())
+{
+	await scope.CheckAndCreateRole();
+}
+
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +19,15 @@ namespace DataAccessLayer
 {
 	public class AppDbContext : IdentityDbContext<AppUser, AppRole, int>
 	{
-		public AppDbContext(DbContextOptions options) : base(options)
+		private readonly IConfiguration _configuration;
+		public AppDbContext(DbContextOptions options, IConfiguration configuration) : base(options)
 		{
+			_configuration = configuration;
 		}
-		public AppDbContext()
-		{
+		//public AppDbContext()
+		//{
 
-		}
+		//}
 		public DbSet<AppUser> AppUsers { get; set; }
 		public DbSet<AppRole> AppRoles { get; set; }
 		public DbSet<Image> Images { get; set; }
@@ -33,14 +36,15 @@ namespace DataAccessLayer
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			// EnableSensitiveDataLogging özelliğini etkinleştir
 			optionsBuilder.EnableSensitiveDataLogging();
-
-			// Diğer yapılandırmaları burada yapabilirsiniz
+			//if (!optionsBuilder.IsConfigured)
+			//{
+			//	optionsBuilder.UseSqlServer(_configuration["DefaultConnection"]);
+			//}
 		}
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			
+
 
 			modelBuilder.ApplyConfiguration(new PostConfiguration());
 			modelBuilder.ApplyConfiguration(new AppUserConfiguration());
