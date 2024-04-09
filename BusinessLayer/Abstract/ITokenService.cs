@@ -1,4 +1,5 @@
-﻿using EntityLayer.Concrete;
+﻿using DTOLayer;
+using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace BusinessLayer.Abstract
 {
 	public interface ITokenService
 	{
-		string CreateAccessToken(int minute , AppUser appUser);
+		string CreateAccessToken(int minute , AppUserDTO appUser);
 	}
 }

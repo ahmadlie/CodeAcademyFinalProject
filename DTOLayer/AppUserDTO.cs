@@ -16,5 +16,8 @@ namespace DTOLayer
 		public string? Username { get; set; } 
 		public string? Password { get; set; }
 		public ImageDTO? Image { get; set; }
+		public List<AppRoleDTO> AppRoles { get; set; }
+		public List<string>? SelectedRoles { get; set; }
+		public List<PostDTO> PostDTOs { get; set; }
 	}
 }

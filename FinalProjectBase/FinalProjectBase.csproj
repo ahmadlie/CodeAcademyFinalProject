@@ -16,7 +16,6 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\ViewModels\" />
-    <Folder Include="wwwroot\Base\" />
     <Folder Include="wwwroot\images\posts\" />
     <Folder Include="wwwroot\Post\" />
   </ItemGroup>

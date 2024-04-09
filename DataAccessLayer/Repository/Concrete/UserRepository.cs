@@ -21,7 +21,7 @@ namespace DataAccessLayer.Repository.Concrete
 
 		public void Add(AppUser entity)
 		{
-		   	_dbSet.Add(entity);
+			_dbSet.Add(entity);
 			_dbContext.SaveChanges();
 		}
 
@@ -33,17 +33,23 @@ namespace DataAccessLayer.Repository.Concrete
 
 		public IEnumerable<AppUser> GetAll()
 		{
-			return _dbSet.Include(x => x.Image).AsNoTracking().ToList();
+			return _dbSet.Include(x => x.Image)
+				.Include(x=>x.AppRoles)
+				.ToList();
 		}
 
 		public AppUser GetById(int id)
 		{
-			return _dbSet.Include(x=>x.Image).AsNoTracking().FirstOrDefault(x => x.Id == id);
+			return _dbSet.Include(x => x.Image)
+				.Include(x=>x.Posts)
+				.ThenInclude(x=>x.Images)
+				.AsNoTracking()
+			    .FirstOrDefault(x => x.Id == id);
 		}
 
 		public void Save()
 		{
-			_dbContext.SaveChanges();	
+			_dbContext.SaveChanges();
 		}
 
 		public void Update(AppUser entity)

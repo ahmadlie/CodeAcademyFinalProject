@@ -2,21 +2,23 @@
 using DTOLayer;
 using EntityLayer.Concrete;
 using FinalProjectBase.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
 
 namespace FinalProjectBase.Controllers
 {
+	[AllowAnonymous]
 	public class SignUpController : Controller
 	{
 		private readonly IUserService _userService;
-		
+
 		public SignUpController(IUserService userService)
 		{
 
 			_userService = userService;
-			
+
 		}
 
 		public IActionResult Index()
@@ -24,7 +26,8 @@ namespace FinalProjectBase.Controllers
 			return View();
 		}
 
-		public  async Task<IActionResult> SignUp([FromForm] SignUpViewModel signUpViewModel)
+		[AllowAnonymous]
+		public async Task<IActionResult> SignUp([FromForm] SignUpViewModel signUpViewModel)
 		{
 			AppUserDTO appUserDTO = new AppUserDTO()
 			{
@@ -44,10 +47,10 @@ namespace FinalProjectBase.Controllers
 			catch (Exception)
 			{
 				return RedirectToAction("Index");
-			}		    			
-							
-				
-			
+			}
+
+
+
 		}
 	}
 }

@@ -7,38 +7,68 @@
 			<div class="col-md-6">
 				<div class="form-group">
 					<label asp-for="FirstName"></label>
-					<input asp-for="FirstName" class="form-control" />
+					<input asp-for="FirstName" class="form-control" value="@Model.FirstName">
 
 					<label asp-for="LastName"></label>
-					<input asp-for="LastName" class="form-control" />
+					<input asp-for="LastName" class="form-control" value="@Model.LastName">
 
 					<label asp-for="Email"></label>
-					<input asp-for="Email" class="form-control" />
+					<input asp-for="Email" class="form-control" value="@Model.Email">
 
 					<label asp-for="PhoneNumber"></label>
-					<input asp-for="PhoneNumber" class="form-control" />
+					<input asp-for="PhoneNumber" class="form-control" value="@Model.PhoneNumber">
 
 					<label asp-for="Username"></label>
-					<input asp-for="Username" class="form-control" />
+					<input asp-for="Username" class="form-control" value="@Model.Username">
 
 					<label asp-for="Password"></label>
-					<input asp-for="Password" class="form-control" />
+					<input asp-for="Password" class="form-control">
+
+					<br>
+					<div class="dropdown">
+						<button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-expanded="false">
+							Rolleri Seçin
+						</button>
+						<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+							@foreach (var approle in Model.AppRoles)
+							{
+								<li>
+									<input type="checkbox" name="SelectedRoles" value="@approle.Name">
+									<label name="selectedRoles">@approle.Name</label>
+								</li>
+							}
+						</ul>
+					</div>
+
+
 				</div>
 			</div>
 
 			<div class="col-md-6">
 				<div class="form-group">
 					<div class="image-container" id="imageContainer">
-						<img src="@("/images/users/" + Model.Image.ImageName)" class="rounded custom-image" alt="" id="image" onclick="openFileExplorer()">
-						<input asp-for="@Model.FormFile" hidden type="file" id="fileInput" onchange="updateImage()">
-						<input hidden asp-for="Image.Id">
-						<div class="label-overlay">Image</div>
+						@if (Model.Image is not null)
+						{
+							<img src="@("/images/users/" + Model.Image.ImageName)" class="rounded custom-image" alt="" id="image" onclick="openFileExplorer()">
+							<input asp-for="@Model.FormFile" hidden type="file" id="fileInput" onchange="updateImage()">
+							<input hidden asp-for="Image.Id">
+							<div class="label-overlay">Image</div>
+						}
 					</div>
 				</div>
 			</div>
 		</div>
 
 		<script>
+
+			document.querySelectorAll('.dropdown-item').forEach(item => {
+				item.addEventListener('click', event => {
+					const selectedRole = event.target.textContent;
+					console.log('Seçilen rol:', selectedRole);
+				});
+			});
+
+
 			function openFileExplorer() {
 				var fileInput = document.getElementById("fileInput");
 				if (fileInput) {

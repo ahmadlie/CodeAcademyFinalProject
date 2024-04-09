@@ -4,12 +4,14 @@ using DTOLayer;
 using EntityLayer.Concrete;
 using FinalProjectBase.Config;
 using FinalProjectBase.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
 
 namespace FinalProjectBase.Areas.Admin.Controllers
 {
 	[Area("Admin")]
+	[Authorize(Roles = "SuperAdmin")]
 	public class AdminUserController : Controller
 	{
 		private readonly IUserService _userService;
@@ -20,11 +22,11 @@ namespace FinalProjectBase.Areas.Admin.Controllers
 
 
 		[HttpGet]
-		public IActionResult Index()
+		public async Task<IActionResult> Index()
 		{
-			var userDTOs = _userService.GetAll();
-			var appUserViewModels = _userService.MapFromTo<IEnumerable<AppUserDTO>, IEnumerable<AppUserViewModel>>(userDTOs);
-			return View(appUserViewModels);
+			var userDTOs = await _userService.GetAll();
+			//var appUserViewModels = _userService.MapFromTo<Task<IEnumerable<AppUserDTO>>, IEnumerable<AppUserViewModel>>(userDTOs);
+			return View(userDTOs);
 		}
 
 
@@ -53,7 +55,7 @@ namespace FinalProjectBase.Areas.Admin.Controllers
 			{
 				ViewData["CreateMessage"] = ex.Message;
 				return RedirectToAction("Create");
-			}			
+			}
 		}
 
 
@@ -66,23 +68,26 @@ namespace FinalProjectBase.Areas.Admin.Controllers
 
 
 		[HttpGet]
-		public IActionResult Update([FromRoute] int id)
+		public async Task<IActionResult> Update([FromRoute] int id)
 		{
-			var appUserDTO = _userService.GetById(id);
+			var appUserDTO = await _userService.GetById(id);
 			var model = _userService.MapFromTo<AppUserDTO, AppUserViewModel>(appUserDTO);
 			return View(model);
 		}
 
 
 		[HttpPost]
-		public async Task<IActionResult> Update(AppUserViewModel model) 
+		public async Task<IActionResult> Update(AppUserViewModel model)
 		{
-			model.Image = new ImageViewModel()
+			if (model.Image is not null)
 			{
-				Id = model.Image.Id,
-				ImageName = model.FormFile.FileName,
-				ImageUrl = _userService.UploadUserPhoto(model.FormFile)
-			};
+				model.Image = new ImageViewModel()
+				{
+					Id = model.Image.Id,
+					ImageName = model.FormFile.FileName,
+					ImageUrl = _userService.UploadUserPhoto(model.FormFile)
+				};
+			}
 
 			var userDTO = _userService.MapFromTo<AppUserViewModel, AppUserDTO>(model);
 			try
@@ -94,7 +99,7 @@ namespace FinalProjectBase.Areas.Admin.Controllers
 			{
 				return RedirectToAction("Update", "AdminUser");
 			}
-			
+
 		}
 	}
 }

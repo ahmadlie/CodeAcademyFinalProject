@@ -2,12 +2,15 @@
 using DTOLayer;
 using EntityLayer.Concrete;
 using FinalProjectBase.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
 
 namespace FinalProjectBase.Controllers
 {
+	[AllowAnonymous]
 	public class LoginController : Controller
 	{
 		private readonly IUserService _userService;
@@ -23,23 +26,20 @@ namespace FinalProjectBase.Controllers
 		}
 
 		public async Task<IActionResult> Login([FromForm] LoginViewModel loginViewModel)
-		{
-			AppUserDTO appUserDTO = new AppUserDTO()
-			{
-				Username = loginViewModel.Username,
-				Password = loginViewModel.Password,
-			};
+		{		
 			try
 			{
-				await _userService.Login(appUserDTO);
+				var appUserDTO = _userService.MapFromTo<LoginViewModel, AppUserDTO>(loginViewModel);
+				var token = await _userService.Login(appUserDTO);
+				HttpContext.Response.Cookies.Append("JWT", token);
 				return RedirectToAction("Index", "Home");
+				
 			}
 			catch (Exception ex)
 			{
 				TempData["Message"] = ex.Message;
 				return RedirectToAction("Index");
 			}
-			
 		}
 	}
 }

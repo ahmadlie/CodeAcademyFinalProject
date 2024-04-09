@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using BusinessLayer.Extensions;
+using FinalProjectBase.Middlewares.Token;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,19 +35,19 @@ builder.Services.AddIdentity<AppUser, AppRole>(opt =>
 	.AddSignInManager<SignInManager<AppUser>>();
 
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 var mapperConfiguration = new MapperConfiguration(cfg =>
 {
 	cfg.AddProfile(new MapperProfile());
 	cfg.AddProfile(new UIMapperProfile());
 });
 builder.Services.AddSingleton(mapperConfiguration.CreateMapper());
-builder.Services.AddTransient<IPostRepository, PostRepository>();
-builder.Services.AddTransient<IUserRepository, UserRepository>();
-builder.Services.AddTransient<IImageRepository, ImageRepository>();
-builder.Services.AddScoped<IPostService, PostService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ITokenService, TokenService>();
+
+// Extension For Dependencies
+builder.Services.AddServiceDependencies();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 				.AddJwtBearer(options =>
 				{
@@ -66,9 +67,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 					};
 				});
 
-
-
 var app = builder.Build();
+
+
+// Middlewares Area
 if (app.Environment.IsDevelopment())
 {
 	app.UseDeveloperExceptionPage();
@@ -79,6 +81,7 @@ else
 	app.UseHsts();
 }
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 
@@ -87,9 +90,16 @@ using (var scope = app.Services.CreateScope())
 	await scope.CheckAndCreateRole();
 }
 
-app.UseRouting();
+app.UseSession();
+
 app.UseAuthentication();
+
+app.UseRouting();
+
 app.UseAuthorization();
+
+app.UseMiddleware<TokenInjectMiddleware>();
+
 app.MapControllerRoute(
 	  name: "areas",
 	  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"

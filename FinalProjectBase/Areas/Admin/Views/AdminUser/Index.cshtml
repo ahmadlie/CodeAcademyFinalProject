@@ -1,4 +1,4 @@
-﻿@model List<FinalProjectBase.Models.AppUserViewModel>
+﻿@model List<DTOLayer.AppUserDTO>
 <div class="container">
 	<div class="mb-3">
 		<a class="btn btn-primary" asp-action="Create" asp-controller="AdminUser" role="button">Create New User</a>
@@ -8,6 +8,7 @@
 			<tr>
 				<th scope="col">Profile Photo</th>
 				<th scope="col">Username</th>
+				<th scope="col">Role</th>
 				<th scope="col">Fullname</th>
 				<th scope="col">Phone Number</th>
 				<th scope="col">Email Address</th>
@@ -19,14 +20,21 @@
 			{
 				<tr>
 					<td class="ml-3">
-						<img src="@("/images/users/" + appUser.Image.ImageName)"
-							 class="rounded-circle img-thumbnail img-fluid shadow" alt=""
-							 style="width: 80px; height: 80px; padding:2px;">
+						@if (appUser.Image is not null)
+						{
+							<img src="@("/images/Account/" + appUser.Image.ImageName)"
+								 class="rounded-circle img-thumbnail img-fluid shadow" alt=""
+								 style="width: 100px; height: 80px; padding:2px;">
+						}
 					</td>
 					<td class="custom-break align-middle"> @appUser.Username</td>
+					@foreach (var appRole in appUser.AppRoles)
+					{
+						<td class="custom-break align-middle"> @appRole.Name</td>
+					}
 					<td class="custom-break align-middle"> @appUser.FirstName @appUser.LastName</td>
 					<td class="custom-break align-middle">@appUser.PhoneNumber</td>
-					<td class="custom-break align-middle"> @appUser.Email</td>
+					<td class="custom-break align-middle"> @appUser.EMail</td>
 					<td class="align-middle">
 						<div class="dropdown">
 							<button type="submit" class="btn btn-secondary dropdown-toggle" id="dropdownMenuLink"

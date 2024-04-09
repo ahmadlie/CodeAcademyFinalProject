@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataAccessLayer.Migrations
 {
     /// <inheritdoc />
-    public partial class mig1 : Migration
+    public partial class mig_1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -42,6 +42,24 @@ namespace DataAccessLayer.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppRoleAppUser",
+                columns: table => new
+                {
+                    AppRolesId = table.Column<int>(type: "int", nullable: false),
+                    AppUsersId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppRoleAppUser", x => new { x.AppRolesId, x.AppUsersId });
+                    table.ForeignKey(
+                        name: "FK_AppRoleAppUser_AspNetRoles_AppRolesId",
+                        column: x => x.AppRolesId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -186,8 +204,8 @@ namespace DataAccessLayer.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AppUserId = table.Column<int>(type: "int", nullable: false),
-                    PostId = table.Column<int>(type: "int", nullable: false),
+                    AppUserId = table.Column<int>(type: "int", nullable: true),
+                    PostId = table.Column<int>(type: "int", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -203,7 +221,7 @@ namespace DataAccessLayer.Migrations
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete : ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Comments_AspNetUsers_DeletedById",
                         column: x => x.DeletedById,
@@ -219,7 +237,7 @@ namespace DataAccessLayer.Migrations
                         column: x => x.PostId,
                         principalTable: "Posts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete : ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -256,8 +274,13 @@ namespace DataAccessLayer.Migrations
                         column: x => x.PostId,
                         principalTable: "Posts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete : ReferentialAction.SetNull);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppRoleAppUser_AppUsersId",
+                table: "AppRoleAppUser",
+                column: "AppUsersId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -354,6 +377,14 @@ namespace DataAccessLayer.Migrations
                 column: "UpdatedById");
 
             migrationBuilder.AddForeignKey(
+                name: "FK_AppRoleAppUser_AspNetUsers_AppUsersId",
+                table: "AppRoleAppUser",
+                column: "AppUsersId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserClaims_AspNetUsers_UserId",
                 table: "AspNetUserClaims",
                 column: "UserId",
@@ -408,6 +439,9 @@ namespace DataAccessLayer.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_Posts_AspNetUsers_UpdatedById",
                 table: "Posts");
+
+            migrationBuilder.DropTable(
+                name: "AppRoleAppUser");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");

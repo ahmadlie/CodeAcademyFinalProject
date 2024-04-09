@@ -23,7 +23,7 @@ namespace BusinessLayer.Concrete
 			_mapper = mapper;
 		}
 
-		public void Create(TDto dto)
+		public virtual void Create(TDto dto)
 		{
 			
 			var entity = _mapper.Map<TEntity>(dto);
@@ -38,14 +38,14 @@ namespace BusinessLayer.Concrete
 			_repository.Save();	
 		}
 
-		public IEnumerable<TDto> GetAll()
+		public async Task<IEnumerable<TDto>> GetAll()
 		{
 			var entities = _repository.GetAll();
 			var dto = _mapper.Map<IEnumerable<TDto>>(entities);
 			return dto;
 		}
 
-		public TDto GetById(int id)
+		public async Task<TDto> GetById(int id)
 		{
 			var entity = _repository.GetById(id);
 			var dto = _mapper.Map<TDto>(entity);

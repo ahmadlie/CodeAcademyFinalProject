@@ -10,8 +10,18 @@ namespace FinalProjectBase.Config
 		{
 			CreateMap<AppUserViewModel,AppUserDTO>();
 			CreateMap<AppUserDTO, AppUserViewModel>();
+
+		    CreateMap<AppUserDTO , LoginViewModel>();
+		    CreateMap<LoginViewModel, AppUserDTO>();
+
 			CreateMap<ImageViewModel, ImageDTO>();
 			CreateMap<ImageDTO, ImageViewModel>();
+
+			CreateMap<AppRoleDTO, AppRoleViewModel>();
+			CreateMap<AppRoleViewModel, AppRoleDTO>();
+
+			CreateMap<PostViewModel, PostDTO>();
+			CreateMap<PostDTO, PostViewModel>();
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Abstract;
+using DTOLayer;
 using EntityLayer.Concrete;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -21,7 +22,7 @@ namespace BusinessLayer.Concrete
 			_configuration = configuration;
 		}
 
-		public string CreateAccessToken(int minute, AppUser appUser)
+		public string CreateAccessToken(int minute, AppUserDTO appUser)
 		{
 
 			// Creating symmetricKey
@@ -31,14 +32,19 @@ namespace BusinessLayer.Concrete
 			SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha256);
 
 			// Creating User Claims
-			List<Claim> claims = (List<Claim>)appUser.AppRoles!.Select(x => new Claim(ClaimTypes.Role, x.Name!));
-			claims.Add(new Claim(ClaimTypes.NameIdentifier, appUser.UserName!));
+			List<Claim> claims = new List<Claim>()
+			{
+				new Claim(ClaimTypes.NameIdentifier,appUser.Id.ToString()),
+				new Claim(ClaimTypes.Name,appUser.FirstName + " " + appUser.LastName),
+				new Claim(ClaimTypes.MobilePhone,appUser.PhoneNumber!),
+			};
+			foreach (var role in appUser.AppRoles!) { claims.Add(new Claim(ClaimTypes.Role, role.Name)); }
 
 			// Creating Token Object and add value in here
 			JwtSecurityToken jwtSecurityToken = new(
 				issuer: _configuration["Token:Issuer"],
 				audience: _configuration["Token:Audience"],
-				claims: claims, 
+				//claims: claims, 
 				expires: DateTime.Now.AddMinutes(minute),
 				signingCredentials: signingCredentials
 			);

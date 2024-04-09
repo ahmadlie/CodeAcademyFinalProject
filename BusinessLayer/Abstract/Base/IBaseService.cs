@@ -9,8 +9,8 @@ namespace BusinessLayer.Abstract.Base
 {
 	public interface IBaseService<TDto>
 	{
-		TDto GetById(int id);
-		IEnumerable<TDto> GetAll();
+		Task<TDto> GetById(int id);
+		Task<IEnumerable<TDto>> GetAll();
 		Task Update(TDto dto);
 		void Delete(int id);
 		void Create(TDto dto);

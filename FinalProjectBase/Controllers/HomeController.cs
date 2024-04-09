@@ -1,10 +1,12 @@
 using BusinessLayer.Abstract;
 using FinalProjectBase.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace FinalProjectBase.Controllers
 {
+	[Authorize]
 	public class HomeController : Controller
 	{
 		private readonly IPostService _postService;

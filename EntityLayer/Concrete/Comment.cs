@@ -10,10 +10,10 @@ namespace EntityLayer.Concrete
 	public class Comment  : BaseEntity
 	{
 		public string Content { get; set; } = null!;
-		public int AppUserId { get; set; }
+		public int? AppUserId { get; set; }
 		public AppUser? AppUser { get; set; }
 
-		public int PostId { get; set; }
+		public int? PostId { get; set; }
 		public Post? Post { get; set; }
 	}
 }
