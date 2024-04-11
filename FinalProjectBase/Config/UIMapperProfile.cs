@@ -22,6 +22,8 @@ namespace FinalProjectBase.Config
 
 			CreateMap<PostViewModel, PostDTO>();
 			CreateMap<PostDTO, PostViewModel>();
+
+			CreateMap<AppUserDTO, AuthorProfileViewModel>().ReverseMap();
 		}
 	}
 }

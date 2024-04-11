@@ -26,7 +26,7 @@ namespace BusinessLayer.Helper
 			.ForMember(dest => dest.EMail, opt => opt.MapFrom(src => src.Email))
 			.ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
 			.ForMember(dest => dest.AppRoles, opt => opt.MapFrom(src => src.AppRoles))
-			.ForMember(dest => dest.PostDTOs, opt => opt.MapFrom(src => src.Posts));
+			.ForMember(dest => dest.Posts, opt => opt.MapFrom(src => src.Posts));
 
 			CreateMap<AppUserDTO, AppUser>()
 			.ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
@@ -35,9 +35,11 @@ namespace BusinessLayer.Helper
 			.ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.EMail))
 			.ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
 			.ForMember(dest => dest.AppRoles, opt => opt.MapFrom(src => src.AppRoles))
-			.ForMember(dest => dest.Posts, opt => opt.MapFrom(src => src.PostDTOs));
+			.ForMember(dest => dest.Posts, opt => opt.MapFrom(src => src.Posts));
 
 			CreateMap<AppRoleDTO, AppRole>().ReverseMap();
+			CreateMap<UAboutDTO, UAbout>().ReverseMap();
+
 		}
 	}
 }

@@ -66,6 +66,8 @@ namespace BusinessLayer.Extensions
 			services.AddScoped<IPostService, PostService>();
 			services.AddScoped<IUserService, UserService>();
 			services.AddScoped<ITokenService, TokenService>();
+			services.AddScoped<IUAboutRepository, UAboutRepository>();
+			services.AddScoped<IUAboutService , UAboutService>();
 			services.AddSession();
 			services.ConfigureApplicationCookie(options =>
 			{

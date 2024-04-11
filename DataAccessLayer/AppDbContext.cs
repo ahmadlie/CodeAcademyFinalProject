@@ -50,6 +50,7 @@ namespace DataAccessLayer
 			modelBuilder.ApplyConfiguration(new AppUserConfiguration());
 			modelBuilder.ApplyConfiguration(new ImageConfiguration());
 			modelBuilder.ApplyConfiguration(new CommentConfiguration());
+
 			base.OnModelCreating(modelBuilder);
 		}
 	}

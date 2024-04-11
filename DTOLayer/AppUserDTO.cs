@@ -18,6 +18,7 @@ namespace DTOLayer
 		public ImageDTO? Image { get; set; }
 		public List<AppRoleDTO> AppRoles { get; set; }
 		public List<string>? SelectedRoles { get; set; }
-		public List<PostDTO> PostDTOs { get; set; }
+		public List<PostDTO> Posts { get; set; }
+		public List<UAboutDTO> UAbouts { get; set; }
 	}
 }

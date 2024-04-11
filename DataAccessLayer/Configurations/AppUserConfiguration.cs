@@ -18,6 +18,11 @@ namespace DataAccessLayer.Configurations
 				   .HasForeignKey(x => x.ImageId)
 				   .OnDelete(DeleteBehavior.SetNull);
 
+			builder.HasMany(x => x.UAbouts)
+				   .WithOne(x => x.AppUser)
+			       .OnDelete(DeleteBehavior.SetNull);
+				   
+
 			//builder.HasMany(x => x.Comments)
 			//	   .WithOne(x => x.AppUser)
 			//	   .HasForeignKey(x => x.AppUserId);

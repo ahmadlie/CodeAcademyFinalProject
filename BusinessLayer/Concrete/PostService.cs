@@ -41,7 +41,7 @@ namespace BusinessLayer.Concrete
 			return _mapper.Map<IEnumerable<PostDTO>>(posts);
 		}
 
-
+	
 		public string UploadPhoto(IFormFile formfile)
 		{
 			var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images", "posts");

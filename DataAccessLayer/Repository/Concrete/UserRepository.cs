@@ -41,6 +41,7 @@ namespace DataAccessLayer.Repository.Concrete
 		public AppUser GetById(int id)
 		{
 			return _dbSet.Include(x => x.Image)
+				.Include(x=>x.UAbouts)
 				.Include(x=>x.Posts)
 				.ThenInclude(x=>x.Images)
 				.AsNoTracking()

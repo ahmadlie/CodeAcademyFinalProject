@@ -198,6 +198,42 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UAbout",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AppUserId = table.Column<int>(type: "int", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<int>(type: "int", nullable: true),
+                    DeletedById = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UAbout", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UAbout_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_UAbout_AspNetUsers_DeletedById",
+                        column: x => x.DeletedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_UAbout_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Comments",
                 columns: table => new
                 {
@@ -220,8 +256,7 @@ namespace DataAccessLayer.Migrations
                         name: "FK_Comments_AspNetUsers_AppUserId",
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete : ReferentialAction.SetNull);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Comments_AspNetUsers_DeletedById",
                         column: x => x.DeletedById,
@@ -236,8 +271,7 @@ namespace DataAccessLayer.Migrations
                         name: "FK_Comments_Posts_PostId",
                         column: x => x.PostId,
                         principalTable: "Posts",
-                        principalColumn: "Id",
-                        onDelete : ReferentialAction.NoAction);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -274,7 +308,7 @@ namespace DataAccessLayer.Migrations
                         column: x => x.PostId,
                         principalTable: "Posts",
                         principalColumn: "Id",
-                        onDelete : ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.SetNull) ;
                 });
 
             migrationBuilder.CreateIndex(
@@ -376,6 +410,21 @@ namespace DataAccessLayer.Migrations
                 table: "Posts",
                 column: "UpdatedById");
 
+            migrationBuilder.CreateIndex(
+                name: "IX_UAbout_AppUserId",
+                table: "UAbout",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UAbout_DeletedById",
+                table: "UAbout",
+                column: "DeletedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UAbout_UpdatedById",
+                table: "UAbout",
+                column: "UpdatedById");
+
             migrationBuilder.AddForeignKey(
                 name: "FK_AppRoleAppUser_AspNetUsers_AppUsersId",
                 table: "AppRoleAppUser",
@@ -460,6 +509,9 @@ namespace DataAccessLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "Comments");
+
+            migrationBuilder.DropTable(
+                name: "UAbout");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

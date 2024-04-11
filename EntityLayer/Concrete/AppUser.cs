@@ -17,6 +17,7 @@ namespace EntityLayer.Concrete
 		public int? ImageId { get; set; }
 		public List<Comment>? Comments { get; set; }
 		public List<AppRole>? AppRoles { get; set; }
+		public List<UAbout>? UAbouts { get; set; }
 
 	}
 }

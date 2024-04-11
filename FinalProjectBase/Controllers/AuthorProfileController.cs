@@ -13,17 +13,34 @@ namespace FinalProjectBase.Controllers
 	public class AuthorProfileController : Controller
 	{
 		private readonly IUserService _userService;
-		private readonly UserManager<AppUser> _userManager;
-		public AuthorProfileController(IUserService userService, UserManager<AppUser> userManager)
+		private readonly IUAboutService _uAboutService;
+		public AuthorProfileController(IUserService userService,
+			IUAboutService uAboutService)
 		{
 			_userService = userService;
-			_userManager = userManager;
+			_uAboutService = uAboutService;
 		}
 
+		[HttpGet]
 		public async Task<IActionResult> Index()
 		{
 			var appUserDTO = await _userService.GetCurrentUserAsync(HttpContext);
 			return View(appUserDTO);
+		}
+
+
+		[HttpPost]
+		public async Task<IActionResult> AddAbout(UAboutDTO uAboutDTO) 
+		{
+			try
+			{
+				_uAboutService.Create(uAboutDTO);
+				return RedirectToAction("Index");
+			}
+			catch (Exception ex)
+			{
+               return BadRequest(ex.Message);
+			}
 		}
 	}
 }
