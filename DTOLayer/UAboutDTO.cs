@@ -9,6 +9,7 @@ namespace DTOLayer
 {
 	public class UAboutDTO
 	{
+		public int Id {  get; set; }
 		public string? Text { get; set; }
 		public int? AppUserId { get; set; }
 		public AppUserDTO? AppUser { get; set; }

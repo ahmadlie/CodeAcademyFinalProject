@@ -35,11 +35,25 @@ namespace FinalProjectBase.Controllers
 			try
 			{
 				_uAboutService.Create(uAboutDTO);
-				return RedirectToAction("Index");
+				return RedirectToAction(nameof(Index));
 			}
 			catch (Exception ex)
 			{
                return BadRequest(ex.Message);
+			}
+		}
+
+		[HttpPost] 
+		public async Task<IActionResult> UpdateUAbout(UAboutDTO uAboutDTO) 
+		{
+			try
+			{
+				await _uAboutService.Update(uAboutDTO);
+				return RedirectToAction(nameof(Index));
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
 			}
 		}
 	}
