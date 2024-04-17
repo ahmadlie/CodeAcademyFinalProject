@@ -62,7 +62,8 @@ namespace BusinessLayer.Extensions
 		{
 			services.AddTransient<IPostRepository, PostRepository>();
 			services.AddTransient<IUserRepository, UserRepository>();
-			services.AddTransient<IImageRepository, ImageRepository>();
+			services.AddScoped<IImageRepository, ImageRepository>();
+			services.AddScoped<IImageService, ImageService>();
 			services.AddScoped<IPostService, PostService>();
 			services.AddScoped<IUserService, UserService>();
 			services.AddScoped<ITokenService, TokenService>();

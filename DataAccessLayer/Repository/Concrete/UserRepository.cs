@@ -19,10 +19,11 @@ namespace DataAccessLayer.Repository.Concrete
 			_dbSet = _dbContext.Set<AppUser>();
 		}
 
-		public void Add(AppUser entity)
+		public int Add(AppUser entity)
 		{
 			_dbSet.Add(entity);
 			_dbContext.SaveChanges();
+			return entity.Id;
 		}
 
 		public void Delete(AppUser entity)
@@ -34,29 +35,37 @@ namespace DataAccessLayer.Repository.Concrete
 		public IEnumerable<AppUser> GetAll()
 		{
 			return _dbSet.Include(x => x.Image)
-				.Include(x=>x.AppRoles)
+				.Include(x => x.AppRoles)
 				.ToList();
 		}
 
 		public AppUser GetById(int id)
 		{
 			return _dbSet.Include(x => x.Image)
-				.Include(x=>x.UAbouts)
-				.Include(x=>x.Posts)
-				.ThenInclude(x=>x.Images)
+				.Include(x => x.UAbouts)
+				.Include(x => x.Posts)
+				.ThenInclude(x => x.Images)
 				.AsNoTracking()
-			    .FirstOrDefault(x => x.Id == id);
+				.FirstOrDefault(x => x.Id == id);
 		}
 
-		public void Save()
+		public int Save()
 		{
-			_dbContext.SaveChanges();
+			return _dbContext.SaveChanges();
 		}
 
 		public void Update(AppUser entity)
 		{
 			_dbSet.Update(entity);
 			_dbContext.SaveChanges();
+		}
+
+
+		public async Task<AppUser> SerachByUserNameAsync(string userName)
+		{
+			var user = _dbSet.Where(u => u.UserName == userName).Include(u=> u.Image).FirstOrDefault();	
+			if (user is not null) { return user; }
+			else { return null; }
 		}
 	}
 }

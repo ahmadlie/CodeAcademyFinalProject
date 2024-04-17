@@ -7,14 +7,12 @@
 				<div class="card w-100 h-50 shadow-xss rounded-xxl border-0 mb-3 mt-3 overflow-hidden">
 					<div class="card-body position-relative h240 bg-image-cover bg-image-center" style="background-image: url(images/bb-9.jpg);"></div>
 					<div class="card-body d-block pt-4 text-center position-relative">
-						@if (Model.Image is not null)
-						{
-							<img src="/images/Account/@Model.Image!.ImageName" alt="image" class="p-1 bg-white  rounded-circle" style="width: 130px; height: 130px; border-radius: 50%;">
-						}
-						else
-						{
-							<img src="/images/Account/defaultuserimage.jpg" alt="image" class="p-1 bg-white  rounded-circle" style="width: 130px; height: 130px; border-radius: 50%;">
-						}
+						<img src="/images/Account/@Model.Image!.ImageName" id="ppimage" alt="image" class="p-1 bg-white  rounded-circle" style="width: 130px; height: 130px; border-radius: 50%;">
+						<form id="editPhotoForm" asp-action="UpdateUserImage" asp-controller="AuthorProfile" method="post" enctype="multipart/form-data">
+							<input name="FormFile" type="file" id="photoInput" hidden>
+							<input name="Id" type="text" value="@Model.Id" hidden>
+							<input name="ImageId" type="text" hidden value="@Model.Image.Id">
+						</form>
 						<h4 class="font-xs ls-1 fw-700 text-grey-900">@Model.FirstName @Model.LastName <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500"></span></h4>
 						<div class="d-flex align-items-center pt-0 position-absolute left-15 top-10" style="margin-top: 140px">
 							@if (Model.Posts is not null)
@@ -124,10 +122,10 @@
 							@*<input type="text" id="urlInput">*@ @*UserMessage*@
 						</div>
 						<div class="card-body d-flex p-0 mt-0">
-							<a href="#" class="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"><i class="font-md text-danger feather-video me-2"></i><span class="d-none-xs">Live Video</span></a>        @*LiveVideo*@
-							<a href="#" id="addPhoto" class="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"><i class="font-md text-success feather-image me-2"></i><span class="d-none-xs">Photo/Video</span></a>
+							<!--<a href="#" class="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"><i class="font-md text-danger feather-video me-2"></i><span class="d-none-xs">Live Video</span></a>-->        @*LiveVideo*@
+							<a href="#" id="addPhoto" class="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"><i class="font-md text-success feather-image me-2"></i><span class="d-none-xs">Select Photo/Video</span></a>
 							<input name="FormFiles" type="file" id="fileInput" style="display: none" multiple />@*PhotoVideo*@
-							<a href="#" class="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"><i class="font-md text-warning feather-camera me-2"></i><span class="d-none-xs">Feeling/Activity</span></a>       @*FealingActivity*@
+							<!--<a href="#" class="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"><i class="font-md text-warning feather-camera me-2"></i><span class="d-none-xs">Feeling/Activity</span></a>-->       @*FealingActivity*@
 							<a href="#" class="ms-auto" id="dropdownMenu4" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i></a>
 							<div class="dropdown-menu dropdown-menu-start p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu4">
 								<div class="card-body p-0 d-flex">
@@ -213,66 +211,102 @@
 </div>
 
 
-<script>
-	document.getElementById("addPhoto").addEventListener("click", function (event) {
-		event.preventDefault();
-		document.getElementById('fileInput').click();
-	});
-
-	document.getElementById("CreatePost").addEventListener("click", function (event) {
-		event.preventDefault();
-		document.getElementById("formPostCreate").submit();
-	});
+@section authorProfileJs{
 
 
-	var editBtn = document.getElementById("aboutBtn");
+	<script>
 
 
-	editBtn.addEventListener("click", function (event) {
-		event.preventDefault();
-		var saveButton = document.getElementById("saveBtn");
-		var aboutInput = document.getElementById("aboutInput");
-		if (aboutInput.hidden) {
-			aboutInput.value = "";
-			aboutInput.removeAttribute("hidden");
-			saveButton.removeAttribute("hidden");
-		} else {
-			aboutInput.setAttribute("hidden", "true");
-			saveButton.setAttribute("hidden", "true");
+		document.getElementById("ppimage").addEventListener("click", function (event) {
+			event.preventDefault();
+			var photoInput = document.getElementById("photoInput");
+			photoInput.click();
+		})
+
+		document.getElementById("addPhoto").addEventListener("click", function (event) {
+			event.preventDefault();
+			document.getElementById('fileInput').click();
+		});
+
+		document.getElementById("CreatePost").addEventListener("click", function (event) {
+			event.preventDefault();
+			document.getElementById("formPostCreate").submit();
+		});
+
+
+		var editBtn = document.getElementById("aboutBtn");
+
+
+		editBtn.addEventListener("click", function (event) {
+			event.preventDefault();
+			var saveButton = document.getElementById("saveBtn");
+			var aboutInput = document.getElementById("aboutInput");
+			if (aboutInput.hidden) {
+				aboutInput.value = "";
+				aboutInput.removeAttribute("hidden");
+				saveButton.removeAttribute("hidden");
+			} else {
+				aboutInput.setAttribute("hidden", "true");
+				saveButton.setAttribute("hidden", "true");
+			}
+		});
+
+
+		document.getElementById("aboutInput").addEventListener("input", function () {
+			// Input alanının yüksekliğini içerik miktarına göre ayarla
+			this.style.height = "auto";
+			this.style.height = (this.scrollHeight) + "px";
+			// Input alanını yukarı kaydır
+			this.scrollTop = this.scrollHeight;
+		});
+
+		document.getElementById("photoInput").addEventListener("change", function () {
+			document.getElementById("editPhotoForm").submit();
+		})
+
+
+	</script>
+}
+
+
+@section authorProfileCss{
+	<style>
+		.input-container {
+			margin-top: 10px;
 		}
-	});
 
-
-	document.getElementById("aboutInput").addEventListener("input", function () {
-		// Input alanının yüksekliğini içerik miktarına göre ayarla
-		this.style.height = "auto";
-		this.style.height = (this.scrollHeight) + "px";
-		// Input alanını yukarı kaydır
-		this.scrollTop = this.scrollHeight;
-	});
-
-
-
-
-</script>
-
-<style>
-	.input-container {
-		margin-top: 10px;
-	}
-
-	.input-field {
-		padding: 8px;
-		border: 1px solid #ccc;
-		border-radius: 4px;
-		font-size: 14px;
-		width: 200px; /* Başlangıç genişliği */
-		transition: height 0.3s ease-in-out; /* Yükseklik değişimini yumuşatmak için geçiş efekti */
-	}
-
-		.input-field:focus {
-			outline: none;
-			border-color: dodgerblue;
-			box-shadow: 0 0 5px dodgerblue;
+		.input-field {
+			padding: 8px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			font-size: 14px;
+			width: 200px; /* Başlangıç genişliği */
+			transition: height 0.3s ease-in-out; /* Yükseklik değişimini yumuşatmak için geçiş efekti */
 		}
-</style>
+
+			.input-field:focus {
+				outline: none;
+				border-color: dodgerblue;
+				box-shadow: 0 0 5px dodgerblue;
+			}
+
+		.custom-button {
+			background-color: yellow;
+			color: #ffffff;
+			border: 1px solid black;
+			border-radius: 50px;
+			cursor: pointer;
+			font-size: 12px;
+			padding-left: 10px;
+			padding-right: 10px;
+			color: black;
+			margin-right: 10px;
+			transition: background-color 0.3s;
+		}
+
+			.custom-button:hover {
+				background-color: black; /* Butonun üzerine gelindiğinde arka plan rengi siyah */
+				color: white; /* Buton metninin üzerine gelindiğinde rengi beyaz */
+			}
+	</style>
+}

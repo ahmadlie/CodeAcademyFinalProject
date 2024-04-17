@@ -13,7 +13,7 @@ namespace BusinessLayer.Abstract.Base
 		Task<IEnumerable<TDto>> GetAll();
 		Task Update(TDto dto);
 		void Delete(int id);
-		void Create(TDto dto);
+		int Create(TDto dto);
 
 	}
 }

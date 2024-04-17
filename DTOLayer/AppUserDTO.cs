@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,9 +17,11 @@ namespace DTOLayer
 		public string? Username { get; set; } 
 		public string? Password { get; set; }
 		public ImageDTO? Image { get; set; }
+		public int ImageId { get; set; }
 		public List<AppRoleDTO> AppRoles { get; set; }
 		public List<string>? SelectedRoles { get; set; }
 		public List<PostDTO> Posts { get; set; }
 		public List<UAboutDTO> UAbouts { get; set; }
+		public IFormFile? FormFile { get; set; }
 	}
 }

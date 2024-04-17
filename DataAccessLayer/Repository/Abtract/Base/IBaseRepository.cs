@@ -14,7 +14,7 @@ namespace DataAccessLayer.Repository.Abtract.Base
 		TEntity GetById(int id);
 		void Delete(TEntity entity);
 		void Update(TEntity entity);
-		void Add(TEntity entity);
+		int Add(TEntity entity);
 		void Save();
 	}
 }

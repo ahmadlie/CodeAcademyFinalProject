@@ -10,5 +10,6 @@ namespace DataAccessLayer.Repository.Abtract
 {
 	public interface IImageRepository : IBaseRepository<Image>
 	{
+		Task<Image> FindLast();
 	}
 }

@@ -20,10 +20,11 @@ namespace DataAccessLayer.Repository.Concrete
 			_entities = _dbContext.Set<TEntity>();			
 		}
 
-		public void Add(TEntity entity)
+		public int Add(TEntity entity)
 		{
 			_entities.Add(entity);
 			_dbContext.SaveChanges();
+			return entity.Id;
 		}
 
 		public void Delete(TEntity entity)

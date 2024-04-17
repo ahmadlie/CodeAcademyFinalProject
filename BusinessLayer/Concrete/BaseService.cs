@@ -23,36 +23,34 @@ namespace BusinessLayer.Concrete
 			_mapper = mapper;
 		}
 
-		public virtual void Create(TDto dto)
+		public virtual int Create(TDto dto)
 		{
 			
 			var entity = _mapper.Map<TEntity>(dto);
-			_repository.Add(entity);
+			return _repository.Add(entity);
 		}
 
-		public void Delete(int id)
+		public virtual void Delete(int id)
 		{
-			var dto = GetById(id);
-			var entity = _mapper.Map<TEntity>(dto);
-			_repository.Delete(entity);
-			_repository.Save();	
+			var entity = _repository.GetById(id);			
+			_repository.Delete(entity);	
 		}
 
-		public async Task<IEnumerable<TDto>> GetAll()
+		public virtual async Task<IEnumerable<TDto>> GetAll()
 		{
 			var entities = _repository.GetAll();
 			var dto = _mapper.Map<IEnumerable<TDto>>(entities);
 			return dto;
 		}
 
-		public async Task<TDto> GetById(int id)
+		public virtual async Task<TDto> GetById(int id)
 		{
 			var entity = _repository.GetById(id);
 			var dto = _mapper.Map<TDto>(entity);
 			return dto;
 		}
 
-		public async Task Update(TDto dto)
+		public virtual async Task Update(TDto dto)
 		{
 			var entity = _mapper.Map<TEntity>(dto);
 			_repository.Update(entity);

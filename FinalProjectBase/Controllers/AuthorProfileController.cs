@@ -14,11 +14,14 @@ namespace FinalProjectBase.Controllers
 	{
 		private readonly IUserService _userService;
 		private readonly IUAboutService _uAboutService;
+		private readonly IImageService _imageService;
 		public AuthorProfileController(IUserService userService,
-			IUAboutService uAboutService)
+			IUAboutService uAboutService,
+			IImageService imageService)
 		{
 			_userService = userService;
 			_uAboutService = uAboutService;
+			_imageService = imageService;
 		}
 
 		[HttpGet]
@@ -30,7 +33,7 @@ namespace FinalProjectBase.Controllers
 
 
 		[HttpPost]
-		public async Task<IActionResult> AddAbout(UAboutDTO uAboutDTO) 
+		public async Task<IActionResult> AddAbout(UAboutDTO uAboutDTO)
 		{
 			try
 			{
@@ -39,12 +42,12 @@ namespace FinalProjectBase.Controllers
 			}
 			catch (Exception ex)
 			{
-               return BadRequest(ex.Message);
+				return BadRequest(ex.Message);
 			}
 		}
 
-		[HttpPost] 
-		public async Task<IActionResult> UpdateUAbout(UAboutDTO uAboutDTO) 
+		[HttpPost]
+		public async Task<IActionResult> UpdateUAbout(UAboutDTO uAboutDTO)
 		{
 			try
 			{
@@ -55,6 +58,23 @@ namespace FinalProjectBase.Controllers
 			{
 				return BadRequest(ex.Message);
 			}
+		}
+
+
+		[HttpPost]
+		public async Task<IActionResult> UpdateUserImage(AppUserDTO dto)
+		{
+			try
+			{				
+				await _userService.UpdateUserWithPhoto(dto);
+				return RedirectToAction(nameof(Index));
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+			
+
 		}
 	}
 }

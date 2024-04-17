@@ -30,6 +30,7 @@ namespace BusinessLayer.Concrete
 		private readonly IUserRepository _userRepository;
 		private readonly IMapper _mapper;
 		private readonly ITokenService _tokenService;
+		private readonly IImageService _imageService;
 		private readonly IHostingEnvironment _hostEnvironment;
 
 		public UserService(IUserRepository repository,
@@ -38,7 +39,8 @@ namespace BusinessLayer.Concrete
 			SignInManager<AppUser> signInManager,
 			IHostingEnvironment hostEnvironment,
 			ITokenService tokenService,
-			RoleManager<AppRole> roleManager)
+			RoleManager<AppRole> roleManager,
+			IImageService imageService)
 		{
 			_userRepository = repository;
 			_mapper = mapper;
@@ -47,11 +49,12 @@ namespace BusinessLayer.Concrete
 			_hostEnvironment = hostEnvironment;
 			_tokenService = tokenService;
 			_roleManager = roleManager;
+			_imageService = imageService;
 		}
-		public void Create(AppUserDTO dto)
+		public int Create(AppUserDTO dto)
 		{
 			var entity = _mapper.Map<AppUser>(dto);
-			_userRepository.Add(entity);
+			return _userRepository.Add(entity);
 		}
 
 		public void Delete(int id)
@@ -122,6 +125,7 @@ namespace BusinessLayer.Concrete
 
 		public async Task SignUp(AppUserDTO user)
 		{
+			if (user.Image is null) { user.ImageId = 33; }
 			var entity = _mapper.Map<AppUser>(user);
 			var res = await _userManager.CreateAsync(entity, user.Password!);
 			var roleResult = await _userManager.AddToRoleAsync(entity, "Member");
@@ -180,6 +184,42 @@ namespace BusinessLayer.Concrete
 			var userWithPosts = _userRepository.GetById(appUser!.Id);
 			var appUserDTO = _mapper.Map<AppUserDTO>(userWithPosts);
 			return appUserDTO;
+		}
+
+		public async Task UpdateUserWithPhoto(AppUserDTO dto)
+		{
+			if (dto.ImageId == 33)        //If user photo is defaultuserimage.jpg
+			{
+				var imageId = _imageService.Create(new ImageDTO()
+				{
+					ImageName = dto.FormFile!.FileName,
+					ImageUrl = UploadUserPhoto(dto.FormFile)
+				});
+				
+				var user = _userRepository.GetById(dto.Id);
+				user.Image = null;
+				user.ImageId = imageId;
+				 _userRepository.Save();
+
+			}
+			else
+			{
+				var imageDTO = new ImageDTO()
+				{
+					Id = dto.ImageId,
+					ImageName = dto.FormFile!.FileName,
+					ImageUrl = UploadUserPhoto(dto.FormFile)
+				};
+				await _imageService.Update(imageDTO);
+			}
+
+		}
+
+		public async Task<AppUserDTO> SearchByUserNameAsync(string userName)
+		{
+			var user =  await _userRepository.SerachByUserNameAsync(userName);
+			var userDTO = _mapper.Map<AppUserDTO>(user);
+			return userDTO;
 		}
 	}
 }

@@ -19,5 +19,7 @@ namespace BusinessLayer.Abstract
 		string UploadUserPhoto(IFormFile formFile);
 		TDest MapFromTo<TSrc, TDest>(TSrc src);
 		Task<AppUserDTO> GetCurrentUserAsync(HttpContext httpContext);
+		Task UpdateUserWithPhoto(AppUserDTO user);
+		Task<AppUserDTO> SearchByUserNameAsync(string userName);
 	}
 }
