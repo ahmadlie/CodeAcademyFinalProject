@@ -15,9 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj" />
-    <ProjectReference Include="..\DTOLayer\DTOLayer.csproj" />
-    <ProjectReference Include="..\EntityLayer\EntityLayer.csproj" />
+    <ProjectReference Include="..\DataAccessLayer\FP.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\DTOLayer\FP.DTOLayer.csproj" />
+    <ProjectReference Include="..\EntityLayer\FP.EntityLayer.csproj" />
   </ItemGroup>
 
 </Project>

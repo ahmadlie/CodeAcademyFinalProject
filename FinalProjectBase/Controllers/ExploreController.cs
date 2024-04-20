@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Abstract;
 using FinalProjectBase.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace FinalProjectBase.Controllers
 {
@@ -25,13 +26,20 @@ namespace FinalProjectBase.Controllers
 			if (model.Type == "username")
 			{
 				var userDTO = await _userService.SearchByUserNameAsync(model.Text);
-				vm.User = userDTO;
-				return View(viewName: "Index", model: vm);
-
+				if (userDTO is not null)
+				{
+					vm.User = userDTO;
+					return View(viewName: "Index", model: vm);
+				}
+				else { return BadRequest(HttpStatusCode.NotFound); }
 			}
 			var userDTOs = await _userService.SearchByNameAsync(model.Text);
-			vm.UserDTOs = userDTOs;
-			return View(viewName: "Index", model: vm);
+			if (userDTOs.Any())
+			{
+				vm.UserDTOs = userDTOs;
+				return View(viewName: "Index", model: vm);
+			}
+			else { return BadRequest(HttpStatusCode.NotFound); }
 		}
 	}
 }

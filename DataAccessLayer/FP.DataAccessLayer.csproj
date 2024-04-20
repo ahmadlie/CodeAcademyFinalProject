@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EntityLayer\EntityLayer.csproj" />
+    <ProjectReference Include="..\EntityLayer\FP.EntityLayer.csproj" />
   </ItemGroup>
 
 </Project>
