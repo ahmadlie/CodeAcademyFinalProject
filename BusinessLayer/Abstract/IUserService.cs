@@ -21,5 +21,7 @@ namespace BusinessLayer.Abstract
 		Task<AppUserDTO> GetCurrentUserAsync(HttpContext httpContext);
 		Task UpdateUserWithPhoto(AppUserDTO user);
 		Task<AppUserDTO> SearchByUserNameAsync(string userName);
+		Task<IEnumerable<AppUserDTO>> SearchByNameAsync(string name);
+
 	}
 }

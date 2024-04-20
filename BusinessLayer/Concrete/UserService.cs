@@ -195,11 +195,11 @@ namespace BusinessLayer.Concrete
 					ImageName = dto.FormFile!.FileName,
 					ImageUrl = UploadUserPhoto(dto.FormFile)
 				});
-				
+
 				var user = _userRepository.GetById(dto.Id);
 				user.Image = null;
 				user.ImageId = imageId;
-				 _userRepository.Save();
+				_userRepository.Save();
 
 			}
 			else
@@ -217,9 +217,16 @@ namespace BusinessLayer.Concrete
 
 		public async Task<AppUserDTO> SearchByUserNameAsync(string userName)
 		{
-			var user =  await _userRepository.SerachByUserNameAsync(userName);
+			var user = await _userRepository.SearchByUserNameAsync(userName);
 			var userDTO = _mapper.Map<AppUserDTO>(user);
 			return userDTO;
+		}
+
+		public async Task<IEnumerable<AppUserDTO>> SearchByNameAsync(string name)
+		{
+			var users = await _userRepository.SearchByNameAsync(name);
+			var usersDTO = _mapper.Map<IEnumerable<AppUserDTO>>(users);
+			return usersDTO;
 		}
 	}
 }

@@ -61,11 +61,21 @@ namespace DataAccessLayer.Repository.Concrete
 		}
 
 
-		public async Task<AppUser> SerachByUserNameAsync(string userName)
+		public async Task<AppUser> SearchByUserNameAsync(string userName)
 		{
-			var user = _dbSet.Where(u => u.UserName == userName).Include(u=> u.Image).FirstOrDefault();	
+			var user = _dbSet.Where(u => u.UserName == userName).Include(u => u.Image).FirstOrDefault();
 			if (user is not null) { return user; }
 			else { return null; }
+		}
+
+		public async Task<IEnumerable<AppUser>> SearchByNameAsync(string name)
+		{
+			var users = _dbSet.Where(u => u.FirstName == name
+									 || u.LastName == name
+									 || u.LastName + " " + u.FirstName == name
+									 || u.FirstName + " " + u.LastName == name)
+							  .ToList();
+			return users;
 		}
 	}
 }

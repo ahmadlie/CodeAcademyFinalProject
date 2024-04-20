@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Abstract;
+using FinalProjectBase.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinalProjectBase.Controllers
@@ -18,10 +19,19 @@ namespace FinalProjectBase.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> SearchUser(string userName)
+		public async Task<IActionResult> SearchUser(SearchViewModel model)
 		{
-			var userDTO = await _userService.SearchByUserNameAsync(userName);
-			return View(viewName: "Index", model: userDTO);
+			SearchResultViewModel vm = new();
+			if (model.Type == "username")
+			{
+				var userDTO = await _userService.SearchByUserNameAsync(model.Text);
+				vm.User = userDTO;
+				return View(viewName: "Index", model: vm);
+
+			}
+			var userDTOs = await _userService.SearchByNameAsync(model.Text);
+			vm.UserDTOs = userDTOs;
+			return View(viewName: "Index", model: vm);
 		}
 	}
 }

@@ -17,6 +17,7 @@ namespace DataAccessLayer.Repository.Abtract
 		void Update(AppUser entity);
 		int Add(AppUser entity);
 		int Save();
-		Task<AppUser> SerachByUserNameAsync(string userName);
+		Task<AppUser> SearchByUserNameAsync(string userName);
+		Task<IEnumerable<AppUser>> SearchByNameAsync(string name);
 	}
 }
