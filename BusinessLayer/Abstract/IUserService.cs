@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Abstract.Base;
 using DTOLayer;
 using EntityLayer.Concrete;
+using FP.DTOLayer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -22,6 +23,8 @@ namespace BusinessLayer.Abstract
 		Task UpdateUserWithPhoto(AppUserDTO user);
 		Task<AppUserDTO> SearchByUserNameAsync(string userName);
 		Task<IEnumerable<AppUserDTO>> SearchByNameAsync(string name);
+		Task VerifySmsCodeAsync(ResetPasswordDTO dto , string userName);
+		Task ResetPasswordAsync(ResetPasswordDTO dto , string userName);
 
 	}
 }

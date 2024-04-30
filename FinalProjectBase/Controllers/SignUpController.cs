@@ -2,6 +2,7 @@
 using DTOLayer;
 using EntityLayer.Concrete;
 using FinalProjectBase.Models;
+using FinalProjectBase.Validations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,11 @@ namespace FinalProjectBase.Controllers
 		[AllowAnonymous]
 		public async Task<IActionResult> SignUp([FromForm] SignUpViewModel signUpViewModel)
 		{
+			if (!ModelState.IsValid) 
+			{
+				return View("Index", signUpViewModel);
+			}
+			
 			AppUserDTO appUserDTO = new AppUserDTO()
 			{
 				FirstName = signUpViewModel.FirstName,

@@ -18,6 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using BusinessLayer.Extensions;
 using FinalProjectBase.Middlewares.Token;
+using FluentValidation.AspNetCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,15 +27,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddIdentity<AppUser, AppRole>(opt =>
 {
 	opt.Password.RequireNonAlphanumeric = false;
-	opt.User.RequireUniqueEmail = false;
+	opt.User.RequireUniqueEmail = true;
 	opt.Password.RequireUppercase = false;
 	opt.Password.RequireLowercase = false;
 	opt.Password.RequiredLength = 1;
 })
 	.AddEntityFrameworkStores<AppDbContext>()
-	.AddSignInManager<SignInManager<AppUser>>();
+	.AddSignInManager<SignInManager<AppUser>>()
+	.AddDefaultTokenProviders();
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 

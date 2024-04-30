@@ -2,10 +2,13 @@
 using AutoMapper.Configuration.Conventions;
 using BusinessLayer.Abstract;
 using BusinessLayer.Abstract.Base;
+using BusinessLayer.Exceptions;
 using DataAccessLayer.Repository.Abtract;
 using DataAccessLayer.Repository.Concrete;
 using DTOLayer;
 using EntityLayer.Concrete;
+using FP.BusinessLayer.Exceptions;
+using FP.DTOLayer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Microsoft.IdentityModel.Tokens;
+using MimeKit.Encodings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -125,7 +129,7 @@ namespace BusinessLayer.Concrete
 
 		public async Task SignUp(AppUserDTO user)
 		{
-			if (user.Image is null) { user.ImageId = 33; }
+			if (user.Image is null) { user.ImageId = 2; }
 			var entity = _mapper.Map<AppUser>(user);
 			var res = await _userManager.CreateAsync(entity, user.Password!);
 			var roleResult = await _userManager.AddToRoleAsync(entity, "Member");
@@ -227,6 +231,26 @@ namespace BusinessLayer.Concrete
 			var users = await _userRepository.SearchByNameAsync(name);
 			var usersDTO = _mapper.Map<IEnumerable<AppUserDTO>>(users);
 			return usersDTO;
+		}
+
+		public async Task VerifySmsCodeAsync(ResetPasswordDTO dto, string userName)
+		{
+			var user = await _userManager.FindByNameAsync(userName);
+			if (user is null) { throw new UserNotFoundException(); }
+			if (user.VerificationCode != dto.VerificationCode) { throw new NotCorrectException(); }
+			user.isSmsVerified = true;
+			var result = await _userManager.UpdateAsync(user);
+			if (!result.Succeeded) { throw new Exception(); }
+		}
+
+		public async Task ResetPasswordAsync(ResetPasswordDTO dto, string userName)
+		{
+			var user = await _userManager.FindByNameAsync(userName);
+			if (user is null) { throw new UserNotFoundException(); }
+			if (!user.isSmsVerified) { throw new NotVerifiedException(); }
+			var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+			var result = await _userManager.ResetPasswordAsync(user, token, dto.NewPassword!);
+			if (!result.Succeeded) { throw new Exception(); }
 		}
 	}
 }

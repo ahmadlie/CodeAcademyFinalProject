@@ -20,12 +20,17 @@ namespace DataAccessLayer.Configurations
 
 			builder.HasMany(x => x.UAbouts)
 				   .WithOne(x => x.AppUser)
-			       .OnDelete(DeleteBehavior.SetNull);
-				   
+				   .OnDelete(DeleteBehavior.SetNull);
+
 
 			//builder.HasMany(x => x.Comments)
 			//	   .WithOne(x => x.AppUser)
 			//	   .HasForeignKey(x => x.AppUserId);
+
+			builder.HasMany(x => x.Followers)
+					.WithMany()
+					.UsingEntity(j => j.ToTable("UserFollowers"));
+
 		}
 	}
 }

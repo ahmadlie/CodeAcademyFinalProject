@@ -6,6 +6,8 @@ using DataAccessLayer;
 using DataAccessLayer.Repository.Abtract;
 using DataAccessLayer.Repository.Concrete;
 using EntityLayer.Concrete;
+using FP.BusinessLayer.Abstract;
+using FP.BusinessLayer.Concrete;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -68,7 +70,8 @@ namespace BusinessLayer.Extensions
 			services.AddScoped<IUserService, UserService>();
 			services.AddScoped<ITokenService, TokenService>();
 			services.AddScoped<IUAboutRepository, UAboutRepository>();
-			services.AddScoped<IUAboutService , UAboutService>();
+			services.AddScoped<IUAboutService, UAboutService>();
+			services.AddScoped<ISmsService, MailService>();
 			services.AddSession();
 			services.ConfigureApplicationCookie(options =>
 			{

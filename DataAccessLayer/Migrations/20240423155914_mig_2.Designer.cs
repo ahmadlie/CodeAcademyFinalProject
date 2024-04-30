@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240410173330_mig_1")]
-    partial class mig_1
+    [Migration("20240423155914_mig_2")]
+    partial class mig_2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,6 +38,21 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("AppUsersId");
 
                     b.ToTable("AppRoleAppUser");
+                });
+
+            modelBuilder.Entity("AppUserAppUser", b =>
+                {
+                    b.Property<int>("AppUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FollowersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AppUserId", "FollowersId");
+
+                    b.HasIndex("FollowersId");
+
+                    b.ToTable("UserFollowers", (string)null);
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.AppRole", b =>
@@ -127,12 +142,21 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("SecurityToken")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("VerificationCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isSmsVerified")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -447,6 +471,21 @@ namespace DataAccessLayer.Migrations
                         .WithMany()
                         .HasForeignKey("AppUsersId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AppUserAppUser", b =>
+                {
+                    b.HasOne("EntityLayer.Concrete.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EntityLayer.Concrete.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("FollowersId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 

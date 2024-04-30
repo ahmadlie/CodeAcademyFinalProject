@@ -14,21 +14,27 @@
 			<form asp-action="SignUp" asp-controller="SignUp" method="post" class="signup">
 				<div class="field">
 					<input asp-for="FirstName" type="text" placeholder="First Name" required>
+					<span asp-validation-for="FirstName" style="color: red"></span>
 				</div>
 				<div class="field">
 					<input asp-for="LastName" type="text" placeholder="Last Name" required>
+					<span asp-validation-for="LastName" style="color: red"></span>
 				</div>
 				<div class="field">
 					<input asp-for="PhoneNumber" type="tel" placeholder="Phone Number" required>
+					<span asp-validation-for="PhoneNumber" style="color: red"></span>
 				</div>
 				<div class="field">
 					<input asp-for="Mail" type="text" placeholder="Email Address" required>
+					<span asp-validation-for="Mail" style="color: red"></span>
 				</div>
 				<div class="field">
 					<input asp-for="Username" type="text" placeholder="Username" required>
+					<span asp-validation-for="Username" style="color: red"></span>
 				</div>
 				<div class="field">
 					<input asp-for="Password" type="password" placeholder="Password" required>
+					<span asp-validation-for="Password" style="color: red"></span>
 				</div>
 
 				<div class="field btn">

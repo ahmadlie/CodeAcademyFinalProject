@@ -1,0 +1,28 @@
+﻿@{
+	Layout = null;
+}
+
+@model FP.DTOLayer.ResetPasswordDTO
+<div class="wrapper">
+	<div class="title-text">
+		<div class="title signup">
+			Verify Code!
+		</div>
+	</div>
+	<div class="form-container">
+		<div class="form-inner">
+			<form asp-action="VerifySmsCode" method="post" class="signup">
+				<div class="field">
+					<input asp-for="VerificationCode" type="text" placeholder="Enter Verification Code..." required>
+				</div>
+				<div class="field btn">
+					<div class="btn-layer"></div>
+					<input type="submit" value="Verify">
+				</div>
+			</form>
+		</div>
+	</div>
+	<p class="text-danger temp-data">@TempData["verifySms"]</p>
+</div>
+
+<link rel="stylesheet" href="~/css/login-signin.css">
