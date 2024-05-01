@@ -3,11 +3,13 @@ using DataAccessLayer.Repository.Abtract;
 using DTOLayer;
 using EntityLayer.Concrete;
 using FinalProjectBase.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinalProjectBase.Controllers
 {
+	[Authorize]
 	public class PostController : Controller
 	{
 		private readonly IPostService _postService;

@@ -33,7 +33,9 @@
 					<span asp-validation-for="Username" style="color: red"></span>
 				</div>
 				<div class="field">
-					<input asp-for="Password" type="password" placeholder="Password" required>
+					<input asp-for="Password" id="signup-password" type="password" placeholder="Password" required>
+					<span class="toggle-password" onclick="togglePasswordVisibility('signup-password')"><i class="fas fa-eye"></i></span>
+
 					<span asp-validation-for="Password" style="color: red"></span>
 				</div>
 
@@ -46,3 +48,31 @@
 	</div>
 </div>
 <link rel="stylesheet" href="~/css/login-signin.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+	.field {
+		position: relative;
+	}
+
+	.toggle-password {
+		position: absolute;
+		top: 50%;
+		right: 10px; 
+		transform: translateY(-50%);
+		cursor: pointer;
+	}
+</style>
+
+<script>
+	function togglePasswordVisibility(inputId) {
+		var passwordInput = document.getElementById(inputId);
+		var toggleButton = document.querySelector('[onclick="togglePasswordVisibility(\'' + inputId + '\')"]');
+		if (passwordInput.type === "password") {
+			passwordInput.type = "text";
+			toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i>';
+		} else {
+			passwordInput.type = "password";
+			toggleButton.innerHTML = '<i class="fas fa-eye"></i>';
+		}
+	}
+</script>

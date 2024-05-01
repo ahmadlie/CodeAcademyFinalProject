@@ -2,12 +2,16 @@
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinalProjectBase.Controllers
-{ 
-
-	[Authorize(Roles = "SuperAdmin")]
+{
+	[Authorize]
 	public class ErrorsController : Controller
 	{
 		public IActionResult AccessDenied()
+		{
+			return View();
+		}
+
+		public IActionResult NotFoundPage()
 		{
 			return View();
 		}

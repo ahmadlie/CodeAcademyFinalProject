@@ -1,0 +1,56 @@
+﻿@model DTOLayer.AppUserDTO
+
+<div class="middle-sidebar-bottom">
+	<div class="middle-sidebar-left">
+		<div class="middle-wrap">
+			<div class="card w-100 border-0 bg-white shadow-xs p-0 mb-4">
+				<div class="card-body p-4 w-100 bg-current border-0 d-flex rounded-3">
+					<a href="default-settings.html" class="d-inline-block mt-2"><i class="ti-arrow-left font-sm text-white"></i></a>
+					<h4 class="font-xs text-white fw-600 ms-4 mb-0 mt-2">Account Details</h4>
+				</div>
+				<div class="card-body p-lg-5 p-4 w-100 border-0 ">
+					<div class="row justify-content-center">
+						<div class="col-lg-4 text-center">
+							<figure class="avatar ms-auto me-auto mb-0 mt-2 w100"><img src="/images/Account/@Model.Image!.ImageName" alt="image" class="shadow-sm rounded-3 w-100"></figure>
+							<h2 class="fw-700 font-sm text-grey-900 mt-3">@Model.FirstName @Model.LastName</h2>
+						</div>
+					</div>
+					<form asp-action="Update" asp-controller="AccountDetails" method="post">
+						<div class="row">
+							<input asp-for="@Model.Id" type="text" class="form-control" value="@Model.Id" hidden>
+							<div class="col-lg-6 mb-3">
+								<div class="form-group">
+									<label asp-for="@Model.FirstName" class="mont-font fw-600 font-xsss">First Name</label>
+									<input asp-for="@Model.FirstName" type="text" class="form-control" value="@Model.FirstName">
+								</div>
+							</div>
+
+							<div class="col-lg-6 mb-3">
+								<div class="form-group">
+									<label asp-for="@Model.LastName" class="mont-font fw-600 font-xsss">Last Name</label>
+									<input asp-for="@Model.LastName" type="text" class="form-control" value="@Model.LastName">
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-lg-6 mb-3">
+								<div class="form-group">
+									<label asp-for="@Model.Username" class="mont-font fw-600 font-xsss">UserName</label>
+									<input asp-for="@Model.Username" type="text" class="form-control" value="@Model.Username">
+								</div>
+							</div>
+						</div>
+						<!-- Update button -->
+						<div class="row">
+							<div class="col-12 text-center">
+								<button type="submit" class="btn btn-primary text-white">Update</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>  

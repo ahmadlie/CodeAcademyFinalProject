@@ -16,6 +16,7 @@ namespace DTOLayer
 		public string Comment {  get; set; }
 		public string Content { get; set; }
 		public List<ImageDTO> Images { get; set; }
+		public AppUserDTO AppUser { get; set; }
 		public int? AppUserId { get; set; }
 	}
 }

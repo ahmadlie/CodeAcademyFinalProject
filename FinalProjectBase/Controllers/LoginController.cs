@@ -30,8 +30,7 @@ namespace FinalProjectBase.Controllers
 			try
 			{
 				var appUserDTO = _userService.MapFromTo<LoginViewModel, AppUserDTO>(loginViewModel);
-				var token = await _userService.Login(appUserDTO);
-				HttpContext.Response.Cookies.Append("JWT", token);
+				await _userService.Login(appUserDTO);
 				return RedirectToAction("Index", "Home");
 				
 			}

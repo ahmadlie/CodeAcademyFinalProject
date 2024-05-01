@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repository.Concrete
 {
-	public class PostRepository : BaseRepository<Post> , IPostRepository
+	public class PostRepository : BaseRepository<Post>, IPostRepository
 	{
 		public PostRepository(AppDbContext dbContext) : base(dbContext)
 		{
@@ -22,9 +22,13 @@ namespace DataAccessLayer.Repository.Concrete
 
 		public IEnumerable<Post> GetPosts()
 		{
-			return _entities.Include(x=>x.Images).ToList();
+			return _entities.Include(x => x.Images)
+					.Include(x => x.AppUser).ThenInclude(y => y.Image)
+					.ToList();
+
+
 		}
 
-		
+
 	}
 }

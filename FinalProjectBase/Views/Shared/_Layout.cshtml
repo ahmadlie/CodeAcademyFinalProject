@@ -1,4 +1,9 @@
 ﻿
+@{
+	@using Microsoft.AspNetCore.Identity
+
+	@inject SignInManager<EntityLayer.Concrete.AppUser> SignInManager
+}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,13 +32,12 @@
 
 	<div class="preloader"></div>
 
-
 	<div class="main-wrapper">
 
 		<!-- navigation top-->
 		<div class="nav-header bg-white shadow-xs border-0">
 			<div class="nav-top">
-				<a href="index-2.html"><i class="feather-zap text-success display1-size me-2 ms-0"></i><span class="d-inline-block fredoka-font ls-3 fw-600 text-current font-xxl logo-text mb-0">Hyper </span> </a>
+				<a asp-action="Index" asp-controller="Home"><i class="feather-zap text-success display1-size me-2 ms-0"></i><span class="d-inline-block fredoka-font ls-3 fw-600 text-current font-xxl logo-text mb-0">Hyper </span> </a>
 				<a href="#" class="mob-menu ms-auto me-2 chat-active-btn"><i class="feather-message-circle text-grey-900 font-sm btn-round-md bg-greylight"></i></a>
 				@*<a href="default-video.html" class="mob-menu me-2"><i class="feather-video text-grey-900 font-sm btn-round-md bg-greylight"></i></a>*@
 				<a href="#" class="me-2 menu-search-icon mob-menu"><i class="feather-search text-grey-900 font-sm btn-round-md bg-greylight"></i></a>
@@ -41,20 +45,51 @@
 			</div>
 
 			@*<form action="#" class="float-left header-search">
-				<div class="form-group mb-0 icon-input">
-					<i class="feather-search font-sm text-grey-400"></i>
-					<input type="text" placeholder="Start typing to search.." class="bg-grey border-0 lh-32 pt-2 pb-2 ps-5 pe-3 font-xssss fw-500 rounded-xl w350 theme-dark-bg">
-				</div>
-			</form>*@
+			<div class="form-group mb-0 icon-input">
+				<i class="feather-search font-sm text-grey-400"></i>
+				<input type="text" placeholder="Start typing to search.." class="bg-grey border-0 lh-32 pt-2 pb-2 ps-5 pe-3 font-xssss fw-500 rounded-xl w350 theme-dark-bg">
+			</div>
+		</form>*@
 			<a href="default.html" class="p-2 text-center ms-3 menu-icon center-menu-icon"><i class="feather-home font-lg alert-primary btn-round-lg theme-dark-bg text-current "></i></a>
-			<a href="default-storie.html" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i class="feather-zap font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500 "></i></a>
+			<a asp-action="Index" asp-controller="Explore" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i class="feather-zap font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500 "></i></a>
 			@*<a href="default-video.html" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i class="feather-video font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500 "></i></a>*@
 			<a asp-action="Index" asp-controller="AuthorProfile" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i class="feather-user font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500 "></i></a>
 			@*<a href="shop-2.html" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i class="feather-shopping-bag font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500 "></i></a>*@
-			<a asp-action="Create" asp-controller="Post" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i class="btn-round-lg font-lg text-primary feather-edit-3 text-grey-500 bg-greylight"></i></a>
-			<a href="#" class="p-2 text-center ms-auto menu-icon" id="dropdownMenu3" data-bs-toggle="dropdown" aria-expanded="false"><span class="dot-count bg-warning"></span><i class="feather-bell font-xl text-current"></i></a>
+			@*<a asp-action="Create" asp-controller="Post" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i class="btn-round-lg font-lg text-primary feather-edit-3 text-grey-500 bg-greylight"></i></a>*@
+			<a href="#" class="p-2 text-center ms-auto menu-icon" id="dropdownMenu3" data-bs-toggle="dropdown" aria-expanded="false"><span class="dot-count bg-warning" hidden></span><i class="feather-bell font-xl text-current" hidden></i></a>
+
+
+			@if (SignInManager.IsSignedIn(User))
+			{
+				var isAdmin = User.IsInRole("SuperAdmin");
+
+				if (isAdmin)
+				{
+					<a asp-area="Admin" asp-controller="Home" asp-action="Index" class="admin-link">DashBoard</a>
+
+					<style>
+						.admin-link {
+							display: inline-block;
+							background-color: #007bff;
+							color: #fff;
+							padding: 10px 20px;
+							border-radius: 5px;
+							font-size: 16px;
+							text-decoration: none; 
+							text-align: center; 
+							line-height: 1; 
+						}
+
+							.admin-link:hover {
+								background-color: #0056b3;
+							}
+					</style>
+
+				}
+			}
+
 			<a href="~/SignUp/Index" class="p-2 text-center ms-3 menu-icon center-menu-icon">SignUp</a>
-			<a href="~/Login/Index" class="p-2 text-center ms-3 menu-icon center-menu-icon">Login</a>
+			@*<a href="~/Login/Index" class="p-2 text-center ms-3 menu-icon center-menu-icon">Login</a>*@
 			<div class="dropdown-menu dropdown-menu-end p-4 rounded-3 border-0 shadow-lg" aria-labelledby="dropdownMenu3">
 
 				<h4 class="fw-700 font-xss mb-4">Notification</h4>
@@ -80,7 +115,7 @@
 					<h6 class="text-grey-500 fw-500 font-xssss lh-4">Mobile Apps UI Designer is require..</h6>
 				</div>
 			</div>
-			<a href="#" class="p-2 text-center ms-3 menu-icon chat-active-btn"><i class="feather-message-square font-xl text-current"></i></a>
+			@*<a href="#" class="p-2 text-center ms-3 menu-icon chat-active-btn"><i class="feather-message-square font-xl text-current"></i></a>*@
 			<div class="p-2 text-center ms-3 position-relative dropdown-menu-icon menu-icon cursor-pointer">
 				<i class="feather-settings animation-spin d-inline-block font-xl text-current"></i>
 				<div class="dropdown-menu-settings switchcolor-wrap">
@@ -185,7 +220,7 @@
 			</div>
 
 
-			<a href="default-settings.html" class="p-0 ms-3 menu-icon"><img src="~/Base/images/profile-4.png" alt="user" class="w40 mt--1"></a>
+			<a asp-action="Index" asp-controller="AccountInformation" class="p-0 ms-3 menu-icon"><img src="~/Base/images/profile-4.png" alt="user" class="w40 mt--1"></a>
 
 		</div>
 		<!-- navigation top -->
@@ -199,20 +234,30 @@
 							<li class="logo d-none d-xl-block d-lg-block"></li>
 							<li><a href="~/Home/Index" class="nav-content-bttn open-font"><i class="feather-tv btn-round-md bg-blue-gradiant me-3"></i><span>Home</span></a></li>
 							<li><a href="~/Explore/Index" class="nav-content-bttn open-font"><i class="feather-globe btn-round-md bg-gold-gradiant me-3"></i><span>Explore</span></a></li>
-							<li><a href="~/AuthorProfile/Index" class="nav-content-bttn open-font"><i class="feather-user btn-round-md bg-primary-gradiant me-3"></i><span>Author Profile </span></a></li>
+							@if (SignInManager.IsSignedIn(User))
+							{
+								var isAdmin = User.IsInRole("SuperAdmin");
+
+								if (!isAdmin)
+								{
+									<li><a asp-action="Index" asp-controller="AuthorProfile" class="nav-content-bttn open-font"><i class="feather-user btn-round-md bg-primary-gradiant me-3"></i><span>Author Profile </span></a></li>
+								}
+							}
+
 						</ul>
 					</div>
 
-					<div class="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1 mb-2">
-						<div class="nav-caption fw-600 font-xssss text-grey-500"><span>More </span>Pages</div>
-						<ul class="mb-3">							
-							<li><a href="default-event.html" class="nav-content-bttn open-font"><i class="font-xl text-current feather-map-pin me-3"></i><span>Latest Event</span></a></li>
-						</ul>
-					</div>
+					@*<div class="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1 mb-2">
+							<div class="nav-caption fw-600 font-xssss text-grey-500"><span>More </span>Pages</div>
+							<ul class="mb-3">
+								<li><a href="default-event.html" class="nav-content-bttn open-font"><i class="font-xl text-current feather-map-pin me-3"></i><span>Latest Event</span></a></li>
+							</ul>
+						</div>*@
 					<div class="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1">
 						<div class="nav-caption fw-600 font-xssss text-grey-500"><span></span> Account</div>
 						<ul class="mb-1">
 							<li class="logo d-none d-xl-block d-lg-block"></li>
+							<li><a asp-action="Index" asp-controller="AccountInformation" class="nav-content-bttn open-font h-auto pt-2 pb-2"><i class="font-sm feather-settings me-3 text-grey-500"></i><span>Settings</span></a></li>
 						</ul>
 					</div>
 				</div>

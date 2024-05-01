@@ -7,6 +7,7 @@ namespace FinalProjectBase.Models
 		public string Content { get; set; }
 		public List<ImageViewModel> Images { get; set; }
 		public List<IFormFile> FormFiles { get; set; }
+		public AppUserViewModel AppUser { get; set; }
 		
 	}
 }

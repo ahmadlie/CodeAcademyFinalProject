@@ -3,12 +3,14 @@ using DataAccessLayer;
 using DataAccessLayer.Repository.Abtract;
 using DTOLayer;
 using FinalProjectBase.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinalProjectBase.Areas.Admin.Controllers
 {
 	[Area("Admin")]
+	[Authorize(Roles = "SuperAdmin")]
 	public class AdminPostController : Controller
 	{
 

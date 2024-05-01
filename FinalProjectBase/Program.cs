@@ -19,6 +19,8 @@ using System.Text;
 using BusinessLayer.Extensions;
 using FinalProjectBase.Middlewares.Token;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +29,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddIdentity<AppUser, AppRole>(opt =>
 {
 	opt.Password.RequireNonAlphanumeric = false;
-	opt.User.RequireUniqueEmail = true;
+	opt.User.RequireUniqueEmail = false;
 	opt.Password.RequireUppercase = false;
 	opt.Password.RequireLowercase = false;
 	opt.Password.RequiredLength = 1;
@@ -37,7 +39,6 @@ builder.Services.AddIdentity<AppUser, AppRole>(opt =>
 	.AddDefaultTokenProviders();
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -48,31 +49,21 @@ var mapperConfiguration = new MapperConfiguration(cfg =>
 });
 builder.Services.AddSingleton(mapperConfiguration.CreateMapper());
 
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+	options.Cookie.Name = "AspNetCore_Auth";
+	options.LoginPath = "/Login/Index";
+	options.AccessDeniedPath = "/Errors/AccessDenied";
+	
+});
+
 // Extension For Dependencies
 builder.Services.AddServiceDependencies();
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-				.AddJwtBearer(options =>
-				{
-					options.TokenValidationParameters = new()
-					{
-						ValidateAudience = true,
-						ValidateIssuer = true,
-						ValidateIssuerSigningKey = true,
-						ValidateLifetime = true,
-
-						ValidAudience = builder.Configuration["Token:Audience"],
-						ValidIssuer = builder.Configuration["Token:Issuer"],
-						IssuerSigningKey = new SymmetricSecurityKey
-						(
-							Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"]!
-						))
-					};
-				});
-
 var app = builder.Build();
 
 
+// Middlewares Area
 // Middlewares Area
 if (app.Environment.IsDevelopment())
 {
@@ -84,24 +75,19 @@ else
 	app.UseHsts();
 }
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseSession();
 
 using (var scope = app.Services.CreateScope())
 {
 	await scope.CheckAndCreateRole();
 }
-
-app.UseSession();
-
-app.UseAuthentication();
-
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.UseMiddleware<TokenInjectMiddleware>();
 
 app.MapControllerRoute(
 	  name: "areas",
@@ -110,4 +96,5 @@ app.MapControllerRoute(
 app.MapControllerRoute(
 	name: "default",
 	pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.Run();

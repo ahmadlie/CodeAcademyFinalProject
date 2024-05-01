@@ -68,7 +68,6 @@ namespace BusinessLayer.Extensions
 			services.AddScoped<IImageService, ImageService>();
 			services.AddScoped<IPostService, PostService>();
 			services.AddScoped<IUserService, UserService>();
-			services.AddScoped<ITokenService, TokenService>();
 			services.AddScoped<IUAboutRepository, UAboutRepository>();
 			services.AddScoped<IUAboutService, UAboutService>();
 			services.AddScoped<ISmsService, MailService>();

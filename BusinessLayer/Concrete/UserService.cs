@@ -33,7 +33,6 @@ namespace BusinessLayer.Concrete
 		private readonly RoleManager<AppRole> _roleManager;
 		private readonly IUserRepository _userRepository;
 		private readonly IMapper _mapper;
-		private readonly ITokenService _tokenService;
 		private readonly IImageService _imageService;
 		private readonly IHostingEnvironment _hostEnvironment;
 
@@ -42,7 +41,6 @@ namespace BusinessLayer.Concrete
 			UserManager<AppUser> userManager,
 			SignInManager<AppUser> signInManager,
 			IHostingEnvironment hostEnvironment,
-			ITokenService tokenService,
 			RoleManager<AppRole> roleManager,
 			IImageService imageService)
 		{
@@ -51,7 +49,6 @@ namespace BusinessLayer.Concrete
 			_userManager = userManager;
 			_signInManager = signInManager;
 			_hostEnvironment = hostEnvironment;
-			_tokenService = tokenService;
 			_roleManager = roleManager;
 			_imageService = imageService;
 		}
@@ -103,21 +100,13 @@ namespace BusinessLayer.Concrete
 			return dto;
 		}
 
-		public async Task<string> Login(AppUserDTO appUserDTO)
+		public async Task Login(AppUserDTO appUserDTO)
 		{
 			var resUser = await _userManager.FindByNameAsync(appUserDTO.Username!);
 			if (resUser is not null)
 			{
 				var resSignIn = await _signInManager.PasswordSignInAsync(resUser, appUserDTO.Password!, false, false);
 				if (!resSignIn.Succeeded) { throw new Exception("Incorrect Username or Password!"); }
-				var userDTO = _mapper.Map<AppUserDTO>(resUser);
-				var rolenames = await _userManager.GetRolesAsync(resUser);
-				foreach (var rolename in rolenames)
-				{
-					var role = await _roleManager.FindByNameAsync(rolename);
-					userDTO.AppRoles.Add(_mapper.Map<AppRoleDTO>(role));
-				}
-				return _tokenService.CreateAccessToken(5, userDTO);
 			}
 			else { throw new Exception("User Not Found!"); }
 		}
@@ -129,7 +118,7 @@ namespace BusinessLayer.Concrete
 
 		public async Task SignUp(AppUserDTO user)
 		{
-			if (user.Image is null) { user.ImageId = 2; }
+			if (user.Image is null) { user.ImageId = 10; }
 			var entity = _mapper.Map<AppUser>(user);
 			var res = await _userManager.CreateAsync(entity, user.Password!);
 			var roleResult = await _userManager.AddToRoleAsync(entity, "Member");
@@ -192,7 +181,7 @@ namespace BusinessLayer.Concrete
 
 		public async Task UpdateUserWithPhoto(AppUserDTO dto)
 		{
-			if (dto.ImageId == 33)        //If user photo is defaultuserimage.jpg
+			if (dto.ImageId == 10)        //If user photo is defaultuserimage.jpg
 			{
 				var imageId = _imageService.Create(new ImageDTO()
 				{
@@ -203,7 +192,7 @@ namespace BusinessLayer.Concrete
 				var user = _userRepository.GetById(dto.Id);
 				user.Image = null;
 				user.ImageId = imageId;
-				_userRepository.Save();
+				_userRepository.Update(user);
 
 			}
 			else
@@ -251,6 +240,18 @@ namespace BusinessLayer.Concrete
 			var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 			var result = await _userManager.ResetPasswordAsync(user, token, dto.NewPassword!);
 			if (!result.Succeeded) { throw new Exception(); }
+		}
+
+		public async Task UpdateUserDetails(AppUserDTO appUserDTO)
+		{
+			var user = _userRepository.GetById(appUserDTO.Id);
+			////user.Email = appUserDTO.EMail;
+			user.FirstName = appUserDTO.FirstName;
+			user.LastName = appUserDTO.LastName;
+			user.PhoneNumber = appUserDTO.PhoneNumber;
+			user.UserName = appUserDTO.Username;
+			//_userRepository.Update(user);
+			await _userManager.UpdateAsync(user);
 		}
 	}
 }

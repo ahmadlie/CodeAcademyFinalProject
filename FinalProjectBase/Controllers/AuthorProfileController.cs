@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace FinalProjectBase.Controllers
 {
-	[Authorize(Roles = "Member")]
+	[Authorize]
 	public class AuthorProfileController : Controller
 	{
 		private readonly IUserService _userService;

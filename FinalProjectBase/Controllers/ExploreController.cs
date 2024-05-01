@@ -1,10 +1,13 @@
 ﻿using BusinessLayer.Abstract;
 using FinalProjectBase.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System.Net;
 
 namespace FinalProjectBase.Controllers
 {
+	[Authorize]
 	public class ExploreController : Controller
 	{
 		private readonly IUserService _userService;
@@ -23,7 +26,8 @@ namespace FinalProjectBase.Controllers
 		public async Task<IActionResult> SearchUser(SearchViewModel model)
 		{
 			SearchResultViewModel vm = new();
-			if (model.Type == "username")
+
+			if (model.Type == "username" || model.Type == null)
 			{
 				var userDTO = await _userService.SearchByUserNameAsync(model.Text);
 				if (userDTO is not null)
@@ -31,7 +35,7 @@ namespace FinalProjectBase.Controllers
 					vm.User = userDTO;
 					return View(viewName: "Index", model: vm);
 				}
-				else { return BadRequest(HttpStatusCode.NotFound); }
+				else { return RedirectToAction(controllerName: "Errors", actionName: "NotFoundPage"); }
 			}
 			var userDTOs = await _userService.SearchByNameAsync(model.Text);
 			if (userDTOs.Any())

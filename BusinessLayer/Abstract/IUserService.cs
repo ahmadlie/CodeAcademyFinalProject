@@ -16,7 +16,7 @@ namespace BusinessLayer.Abstract
 	{
 		Task SignUp(AppUserDTO user);
 		AppUser MapForSignIn(AppUserDTO user);
-		Task<string> Login(AppUserDTO user);
+		Task Login(AppUserDTO user);
 		string UploadUserPhoto(IFormFile formFile);
 		TDest MapFromTo<TSrc, TDest>(TSrc src);
 		Task<AppUserDTO> GetCurrentUserAsync(HttpContext httpContext);
@@ -25,6 +25,7 @@ namespace BusinessLayer.Abstract
 		Task<IEnumerable<AppUserDTO>> SearchByNameAsync(string name);
 		Task VerifySmsCodeAsync(ResetPasswordDTO dto , string userName);
 		Task ResetPasswordAsync(ResetPasswordDTO dto , string userName);
+		Task UpdateUserDetails(AppUserDTO appUserDTO);
 
 	}
 }
