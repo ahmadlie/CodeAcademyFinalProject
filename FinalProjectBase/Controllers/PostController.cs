@@ -36,6 +36,10 @@ namespace FinalProjectBase.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Create(PostViewModel postViewModel)
 		{
+			if (postViewModel.FormFiles is null) 
+			{
+				return BadRequest("Please Add Image for your Post!");
+			}
 			var appUserDTO = await _userService.GetCurrentUserAsync(HttpContext);
 			PostDTO postDTO = new PostDTO()
 			{

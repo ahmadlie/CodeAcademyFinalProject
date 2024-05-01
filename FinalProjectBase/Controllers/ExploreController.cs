@@ -45,5 +45,12 @@ namespace FinalProjectBase.Controllers
 			}
 			else { return BadRequest(HttpStatusCode.NotFound); }
 		}
+
+		[HttpGet]
+		public async Task<IActionResult> SpecifyUser(int id) 
+		{
+			var userDTO = await _userService.GetById(id);
+			return View(userDTO);
+		}
 	}
 }
