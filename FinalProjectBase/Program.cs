@@ -55,7 +55,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 	options.Cookie.Name = "AspNetCore_Auth";
 	options.LoginPath = "/Login/Index";
 	options.AccessDeniedPath = "/Errors/AccessDenied";
-	options.Cookie.Expiration = TimeSpan.FromDays(1);
+	options.ExpireTimeSpan = TimeSpan.FromDays(1);
 });
 
 // Extension For Dependencies

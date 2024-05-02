@@ -1,0 +1,35 @@
+﻿@{
+	Layout = null;
+}
+<div class="wrapper">
+	<div class="title-text">
+		<div class="title login">
+			Login
+		</div>
+	</div>
+	<div class="form-container">
+		<div class="form-inner">
+			<form class="login" id="loginForm" asp-action="Login" asp-controller="AdminAccount" method="post">
+				<div class="field">
+					<input name="username" type="text" placeholder="Username" required>
+				</div>
+				<div class="field">
+					<input name="password" type="password" placeholder="Password" required>
+				</div>				
+				<div class="field btn">
+					<div class="btn-layer"></div>
+					<input type="submit" value="SignIn">
+				</div>				
+			</form>
+		</div>
+		<p class="text-danger temp-data">@TempData["Message"]</p>
+	</div>
+	<div class="background-image"></div>
+</div>
+
+
+
+
+
+<link rel="stylesheet" href="~/css/login-signin.css">
+

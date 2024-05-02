@@ -7,9 +7,9 @@ namespace FinalProjectBase.Areas.Admin.Controllers
 	[Authorize(Roles = "SuperAdmin")]
 	public class HomeController : Controller
 	{
-		public IActionResult Index()
-		{
-			return View();
-		}
+		//public IActionResult Index()
+		//{
+		//	return View();
+		//}
 	}
 }

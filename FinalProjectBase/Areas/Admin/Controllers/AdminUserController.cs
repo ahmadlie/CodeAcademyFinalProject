@@ -40,6 +40,7 @@ namespace FinalProjectBase.Areas.Admin.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Create(AppUserViewModel model)
 		{
+			if(model.FormFile is null) { return BadRequest("Please Select Image"); }
 			model.Image = new ImageViewModel()
 			{
 				ImageName = model.FormFile?.FileName,
@@ -79,6 +80,7 @@ namespace FinalProjectBase.Areas.Admin.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Update(AppUserViewModel model)
 		{
+			if(model.FormFile is null) { return BadRequest("Please Select Image"); }
 			if (model.Image is not null)
 			{
 				model.Image = new ImageViewModel()

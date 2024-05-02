@@ -51,6 +51,7 @@ namespace FinalProjectBase.Areas.Admin.Controllers
 		[HttpPost]
 		public IActionResult Create(PostViewModel postViewModel)
 		{
+			if(postViewModel.FormFiles is null) { return BadRequest("Please Select Image"); }
 			PostDTO postDTO = new PostDTO()
 			{
 				Content = postViewModel.Content,
@@ -89,6 +90,7 @@ namespace FinalProjectBase.Areas.Admin.Controllers
 		[HttpPost]
 		public IActionResult Update(PostViewModel postViewModel , params int[] changedImageIds)
 		{
+			if (postViewModel.FormFiles is null) { return BadRequest("Please Select Image"); }
 			PostDTO postDTO = new PostDTO()
 			{
 				Id = postViewModel.Id,
